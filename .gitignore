@@ -1,0 +1,8 @@
+.DS_Store
+/*.webarchive
+/minted_snapshot.html
+/index-reference.html
+/fonts/
+/scripts/
+/assets/*
+!/assets/small_graphic_green.png
