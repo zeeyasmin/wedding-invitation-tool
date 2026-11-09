@@ -1,0 +1,1162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f0e8db">
+    <meta
+      name="description"
+      content="Zahra and Ejnar invite you to celebrate their wedding on March 13, 2027 in Longwood, Florida."
+    >
+    <title>Zahra &amp; Ejnar — Wedding Invitation</title>
+    <link rel="preconnect" href="https://d1olp21zen30mx.cloudfront.net">
+    <link rel="preconnect" href="https://d2mx2n54ydq2ht.cloudfront.net" crossorigin>
+    <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=Cecily:Regular">
+    <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=MaisonVoyages:CapsRegular">
+    <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=Brandon%20Grotesque:Medium">
+    <style>
+      :root {
+        color-scheme: light;
+
+        /* Edit these values to customize the invitation. */
+        --paper: #f0e8db;
+        --ink: #3c0316;
+        --accent: #7d8779;
+        --surround: #e6e7e5;
+        --panel-border: rgb(60 3 22 / 14%);
+        --card-border: rgb(60 3 22 / 8%);
+        --section-border: rgb(60 3 22 / 15%);
+        --name-size: 107px;
+        --pretext-size: 52px;
+        --joining-size: 102px;
+        --address-size: 22px;
+        --date-size: 51px;
+        --motif-size: 86px;
+        --card-radius: 61px;
+        --script-stroke: 0.3px;
+        --canvas-scale: 0.9;
+        --motif-grid-opacity: 0.38;
+        --paper-speckle-opacity: 0.63;
+        --pretext-spacing: 14px;
+        --name-spacing: 14px;
+        --date-spacing: 14px;
+        --motif-vertical-spacing: 0px;
+        --view-scale: 1;
+        --border-motif-size: 44px;
+        --motif-grid-rotation: 0deg;
+      }
+
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+        --paper: #3c0316;
+        --ink: #f0e8db;
+        --surround: #7d8779;
+        --panel-border: rgb(240 232 219 / 14%);
+        --card-border: rgb(240 232 219 / 8%);
+        --section-border: rgb(240 232 219 / 15%);
+      }
+
+      :root[data-theme="light"] {
+        color-scheme: light;
+        --paper: #f0e8db;
+        --ink: #3c0316;
+        --surround: #e6e7e5;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        width: 100%;
+        height: 100vh;
+        height: 100dvh;
+        min-width: 0;
+        min-height: 0;
+        margin: 0;
+        padding: 14px 18px 18px;
+        overflow: hidden;
+        background: var(--surround);
+        color: var(--ink);
+        font-family: "Brandon Grotesque", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .toolbar {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        height: 42px;
+        margin: 0 auto 10px;
+      }
+
+      .toolbar-button,
+      .panel-button {
+        min-height: 42px;
+        border: 1px solid var(--accent);
+        border-radius: 4px;
+        padding: 0 18px;
+        background: var(--paper);
+        color: var(--ink);
+        cursor: pointer;
+        font: 500 14px "Brandon Grotesque", Arial, sans-serif;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .toolbar-button:hover,
+      .panel-button:hover {
+        background: var(--accent);
+        color: var(--paper);
+      }
+
+      .workspace {
+        display: flex;
+        width: 100%;
+        height: calc(100% - 52px);
+        align-items: stretch;
+        justify-content: center;
+        gap: 16px;
+        margin: 0;
+      }
+
+      .settings-panel {
+        position: relative;
+        width: 300px;
+        height: 100%;
+        max-height: 100%;
+        flex: 0 0 300px;
+        overflow: auto;
+        border: 1px solid var(--panel-border);
+        border-radius: 10px;
+        padding: 22px 18px;
+        background: var(--paper);
+        box-shadow: 0 8px 26px rgb(39 37 34 / 10%);
+      }
+
+      .settings-panel[hidden] {
+        display: none;
+      }
+
+      .settings-section:first-of-type {
+        margin-top: 8px;
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .panel-close {
+        float: right;
+        min-height: 32px;
+        margin: -5px -5px 0 8px;
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--ink);
+        cursor: pointer;
+        font: 24px/1 "Brandon Grotesque", Arial, sans-serif;
+      }
+
+      .invitation {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 720px;
+        height: 1000px;
+        overflow: hidden;
+        border: 1px solid var(--card-border);
+        border-radius: var(--card-radius);
+        background: var(--paper);
+        box-shadow:
+          0 3px 8px rgb(39 37 34 / 10%),
+          0 18px 34px rgb(39 37 34 / 8%);
+        text-align: center;
+        transform: translate(-50%, -50%) scale(var(--view-scale));
+        transform-origin: center;
+      }
+
+      .motif-grid {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: none;
+        width: 1500px;
+        height: 1500px;
+        pointer-events: none;
+        z-index: 0;
+        justify-content: space-evenly;
+        align-content: space-evenly;
+        opacity: var(--motif-grid-opacity);
+        transform: translate(-50%, -50%) rotate(var(--motif-grid-rotation));
+        transform-origin: center;
+      }
+
+      .motif-grid img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .paper-speckles {
+        position: absolute;
+        z-index: 1;
+        inset: 0;
+        display: none;
+        overflow: hidden;
+        opacity: var(--paper-speckle-opacity);
+        pointer-events: none;
+      }
+
+      .paper-speckles span {
+        position: absolute;
+        display: block;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      .motif-border {
+        z-index: 1;
+        position: absolute;
+        inset: 9px;
+        display: none;
+        pointer-events: none;
+      }
+
+      .motif-border-edge {
+        position: absolute;
+        background-image: url("assets/small_graphic_green.png");
+        background-size: var(--border-motif-size) var(--border-motif-size);
+      }
+
+      .motif-border-edge.top,
+      .motif-border-edge.bottom {
+        right: var(--border-motif-size);
+        left: var(--border-motif-size);
+        height: var(--border-motif-size);
+        background-repeat: repeat-x;
+      }
+
+      .motif-border-edge.top { top: 0; }
+      .motif-border-edge.bottom { bottom: 0; }
+
+      .motif-border-edge.left,
+      .motif-border-edge.right {
+        top: var(--border-motif-size);
+        bottom: var(--border-motif-size);
+        width: var(--border-motif-size);
+        background-repeat: repeat-y;
+      }
+
+      .motif-border-edge.left { left: 0; }
+      .motif-border-edge.right { right: 0; }
+
+      .invitation[data-tile="true"] .motif-grid,
+      .invitation[data-border="true"] .motif-border,
+      .invitation[data-paper="true"] .paper-speckles {
+        display: block;
+      }
+
+      .invitation[data-tile="true"] .motif-grid {
+        display: grid;
+      }
+
+      .stage {
+        position: relative;
+        min-width: 0;
+        min-height: 0;
+        flex: 1 1 auto;
+      }
+
+      .exporting .invitation {
+        position: relative;
+        top: auto;
+        left: auto;
+        transform: none;
+      }
+
+      .details {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 48px 38px;
+        transform: scale(var(--canvas-scale));
+        transform-origin: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 var(--pretext-spacing);
+        font-family: "Cecily", cursive;
+        font-size: var(--pretext-size);
+        font-weight: 400;
+        -webkit-text-stroke: var(--script-stroke) currentColor;
+        line-height: 1.3;
+      }
+
+      .name {
+        margin: 0;
+        font-family: "MaisonVoyages", Georgia, serif;
+        font-size: var(--name-size);
+        font-weight: 400;
+        letter-spacing: 0.1em;
+        line-height: 1.05;
+        text-indent: 0.1em;
+      }
+
+      .name-block {
+        display: flex;
+        flex: 0 0 auto;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: var(--name-spacing);
+      }
+
+      .joining-word {
+        display: grid;
+        width: 100%;
+        height: 104px;
+        flex: 0 0 104px;
+        place-items: center;
+        margin: 0;
+        font-family: "Cecily", cursive;
+        font-size: var(--joining-size);
+        font-weight: 400;
+        -webkit-text-stroke: var(--script-stroke) currentColor;
+        line-height: 1;
+        transform: translateY(-0.2em);
+      }
+
+      .motif-slot {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 48px;
+        flex: 0 0 48px;
+        margin-block: var(--motif-vertical-spacing);
+      }
+
+      .details[data-show-motifs="false"] .motif-slot {
+        visibility: hidden;
+      }
+
+      .petals {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: var(--motif-size);
+        height: var(--motif-size);
+        max-width: none;
+        object-fit: contain;
+        transform: translate(-50%, -50%);
+      }
+
+      .date {
+        display: flex;
+        flex-direction: column;
+        margin: 0 0 var(--date-spacing);
+        color: var(--ink);
+        font-family: "Cecily", cursive;
+        font-size: var(--date-size);
+        font-weight: 400;
+        -webkit-text-stroke: var(--script-stroke) currentColor;
+        line-height: 1.2;
+      }
+
+      .date-line {
+        display: block;
+      }
+
+      .location {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        flex: 0 0 auto;
+        margin: auto 0 14px;
+        color: var(--ink);
+        font-family: "Brandon Grotesque", Arial, sans-serif;
+        font-size: var(--address-size);
+        font-weight: 500;
+        letter-spacing: 0.2em;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .location-line {
+        display: block;
+      }
+
+      .reception-line {
+        color: var(--accent);
+        font-size: calc(var(--address-size) * 0.82);
+        font-weight: 600;
+      }
+
+      .control {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 7px 12px;
+        margin: 17px 0;
+      }
+
+      .control label,
+      .control output {
+        font-size: 14px;
+      }
+
+      .control input {
+        grid-column: 1 / -1;
+        width: 100%;
+        accent-color: var(--accent);
+      }
+
+      .control.checkbox-control {
+        grid-template-columns: auto 1fr;
+        align-items: center;
+      }
+
+      .checkbox-control input {
+        grid-column: 1;
+        grid-row: 1;
+        width: 17px;
+        height: 17px;
+        margin: 0;
+      }
+
+      .checkbox-control label {
+        grid-column: 2;
+        grid-row: 1;
+      }
+
+      .checkbox-control[hidden] {
+        display: none;
+      }
+
+      .control[hidden] {
+        display: none;
+      }
+
+      .settings-section {
+        margin: 24px 0 12px;
+        border-top: 1px solid var(--section-border);
+        padding-top: 18px;
+      }
+
+      .settings-section h3 {
+        margin: 0;
+        color: var(--accent);
+        font-size: 13px;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+      }
+
+      .theme-options {
+        display: flex;
+        gap: 16px;
+        margin-top: 8px;
+      }
+
+      .theme-options label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+      }
+
+      .theme-options input {
+        width: auto;
+        accent-color: var(--accent);
+      }
+
+      .theme-control {
+        display: block;
+      }
+
+      .settings-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 25px;
+      }
+
+      .panel-button.primary {
+        border-color: var(--ink);
+        background: var(--ink);
+        color: var(--paper);
+      }
+
+      .panel-button.primary:hover {
+        border-color: var(--accent);
+        background: var(--accent);
+      }
+
+      .export-status {
+        min-height: 1.4em;
+        margin: 14px 0 0;
+        color: var(--accent);
+        font-size: 13px;
+      }
+
+      @media print {
+        body {
+          min-width: 0;
+          padding: 0;
+          background: white;
+        }
+
+        .toolbar {
+          display: none;
+        }
+
+        .settings-panel {
+          display: none;
+        }
+
+        .invitation {
+          border: 0;
+          border-radius: var(--card-radius);
+          box-shadow: none;
+        }
+      }
+
+      @media (max-width: 800px) {
+        body {
+          padding: 8px;
+        }
+
+        .toolbar {
+          position: relative;
+          z-index: 25;
+          height: 40px;
+          margin-bottom: 6px;
+        }
+
+        .workspace {
+          position: relative;
+          height: calc(100% - 46px);
+          gap: 0;
+        }
+
+        .settings-panel {
+          position: fixed;
+          z-index: 20;
+          top: 54px;
+          right: 8px;
+          left: 8px;
+          width: auto;
+          height: auto;
+          max-height: 48dvh;
+          flex: none;
+          padding: 16px;
+          border-radius: 0 0 10px 10px;
+        }
+
+        body.settings-open .workspace {
+          padding-top: 48dvh;
+        }
+
+        .stage {
+          width: 100%;
+          height: 100%;
+          flex: 1 1 auto;
+        }
+
+        .panel-button,
+        .toolbar-button {
+          min-height: 38px;
+          padding: 0 12px;
+          font-size: 12px;
+        }
+
+        .settings-actions {
+          gap: 8px;
+        }
+
+        .settings-actions .panel-button {
+          flex: 1 1 auto;
+        }
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  </head>
+  <body>
+    <header class="toolbar">
+      <button class="toolbar-button" id="settings-toggle" type="button" aria-expanded="true" aria-controls="settings-panel">
+        Invitation settings
+      </button>
+    </header>
+
+    <div class="workspace">
+      <aside class="settings-panel" id="settings-panel" aria-label="Invitation settings">
+        <button class="panel-close" id="close-settings" type="button" aria-label="Hide settings">&times;</button>
+
+        <section class="settings-section" aria-labelledby="background-heading">
+          <h3 id="background-heading">Background</h3>
+          <div class="control checkbox-control">
+            <input id="treatment-tile" type="checkbox">
+            <label for="treatment-tile">Repeated motif background</label>
+          </div>
+          <div class="control" id="motif-opacity-control" hidden>
+            <label for="motif-opacity">Background motif opacity</label>
+            <output id="motif-opacity-output">38%</output>
+            <input id="motif-opacity" type="range" min="0" max="100" step="1" value="38">
+          </div>
+          <div class="control" id="motif-tile-size-control" hidden>
+            <label for="motif-tile-size">Motif size</label>
+            <output id="motif-tile-size-output">56 px</output>
+            <input id="motif-tile-size" type="range" min="48" max="100" step="1" value="56">
+          </div>
+          <div class="control" id="motif-tile-spacing-control" hidden>
+            <label for="motif-tile-spacing">Motif spacing</label>
+            <output id="motif-tile-spacing-output">63 px</output>
+            <input id="motif-tile-spacing" type="range" min="0" max="80" step="1" value="63">
+          </div>
+          <div class="control" id="motif-grid-rotation-control" hidden>
+            <label for="motif-grid-rotation">Rotate motif grid</label>
+            <output id="motif-grid-rotation-output">20°</output>
+            <input id="motif-grid-rotation" type="range" min="-45" max="45" step="5" value="20">
+          </div>
+          <div class="control checkbox-control">
+            <input id="treatment-border" type="checkbox" checked>
+            <label for="treatment-border">Thin motif border</label>
+          </div>
+          <div class="control" id="motif-border-size-control" hidden>
+            <label for="motif-border-size">Border motif size / density</label>
+            <output id="motif-border-size-output">44 px</output>
+            <input id="motif-border-size" type="range" min="24" max="96" step="1" value="44">
+          </div>
+          <div class="control checkbox-control">
+            <input id="treatment-paper" type="checkbox">
+            <label for="treatment-paper">Handmade paper speckles</label>
+          </div>
+          <div class="control" id="paper-speckle-density-control" hidden>
+            <label for="paper-speckle-density">Paper speckle density</label>
+            <output id="paper-speckle-density-output">500 specks</output>
+            <input id="paper-speckle-density" type="range" min="0" max="500" step="10" value="500">
+          </div>
+          <div class="control" id="paper-speckle-opacity-control" hidden>
+            <label for="paper-speckle-opacity">Paper speckle opacity</label>
+            <output id="paper-speckle-opacity-output">63%</output>
+            <input id="paper-speckle-opacity" type="range" min="0" max="100" step="1" value="63">
+          </div>
+          <div class="control theme-control">
+            <span>Color palette</span>
+            <div class="theme-options" role="radiogroup" aria-label="Color palette">
+              <label><input type="radio" name="theme" value="light"> Light</label>
+              <label><input type="radio" name="theme" value="dark" checked> Dark</label>
+            </div>
+          </div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="card-heading">
+          <h3 id="card-heading">Card</h3>
+          <div class="control">
+            <label for="canvas-scale">Content scale</label>
+            <output id="canvas-scale-output">90%</output>
+            <input id="canvas-scale" type="range" min="65" max="105" step="1" value="90" data-variable="--canvas-scale" data-factor="0.01" data-display-unit="%">
+          </div>
+          <div class="control">
+            <label for="card-radius">Corner radius</label>
+            <output id="card-radius-output">61 px</output>
+            <input id="card-radius" type="range" min="0" max="120" step="1" value="61" data-variable="--card-radius" data-unit="px">
+          </div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="text-heading">
+          <h3 id="text-heading">Text</h3>
+          <div class="control">
+            <label for="pretext-size">Pretext size</label>
+            <output id="pretext-size-output">52 px</output>
+            <input id="pretext-size" type="range" min="42" max="90" step="1" value="52" data-variable="--pretext-size" data-unit="px">
+          </div>
+          <div class="control">
+            <label for="script-stroke">Script thickness</label>
+            <output id="script-stroke-output">0.3 px</output>
+            <input id="script-stroke" type="range" min="0" max="1.2" step="0.05" value="0.3" data-variable="--script-stroke" data-unit="px">
+          </div>
+          <div class="control">
+            <label for="pretext-spacing">Spacing after pretext</label>
+            <output id="pretext-spacing-output">14 px</output>
+            <input id="pretext-spacing" type="range" min="0" max="40" step="1" value="14">
+          </div>
+          <div class="control">
+            <label for="name-size">Name size</label>
+            <output id="name-size-output">107 px</output>
+            <input id="name-size" type="range" min="96" max="120" step="1" value="107" data-variable="--name-size" data-unit="px">
+          </div>
+          <div class="control">
+            <label for="joining-size">Ampersand size</label>
+            <output id="joining-size-output">102 px</output>
+            <input id="joining-size" type="range" min="76" max="110" step="1" value="102" data-variable="--joining-size" data-unit="px">
+          </div>
+          <div class="control">
+            <label for="name-spacing">Spacing after names</label>
+            <output id="name-spacing-output">14 px</output>
+            <input id="name-spacing" type="range" min="0" max="40" step="1" value="14">
+          </div>
+          <div class="control">
+            <label for="date-size">Date text size</label>
+            <output id="date-size-output">51 px</output>
+            <input id="date-size" type="range" min="32" max="56" step="1" value="51" data-variable="--date-size" data-unit="px">
+          </div>
+          <div class="control">
+            <label for="date-spacing">Spacing after date</label>
+            <output id="date-spacing-output">14 px</output>
+            <input id="date-spacing" type="range" min="0" max="40" step="1" value="14">
+          </div>
+          <div class="control">
+            <label for="address-size">Address size</label>
+            <output id="address-size-output">22 px</output>
+            <input id="address-size" type="range" min="16" max="24" step="1" value="22" data-variable="--address-size" data-unit="px">
+          </div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="motifs-heading">
+          <h3 id="motifs-heading">Motifs</h3>
+          <div class="control">
+            <label for="motif-size">Divider motif size</label>
+            <output id="motif-size-output">86 px</output>
+            <input id="motif-size" type="range" min="48" max="144" step="1" value="86" data-variable="--motif-size" data-unit="px">
+          </div>
+          <div class="control">
+            <label for="motif-vertical-spacing">Spacing above &amp; below divider motifs</label>
+            <output id="motif-vertical-spacing-output">0 px</output>
+            <input id="motif-vertical-spacing" type="range" min="0" max="80" step="1" value="0" data-variable="--motif-vertical-spacing" data-unit="px">
+          </div>
+          <div class="control checkbox-control">
+            <input id="show-divider-motifs" type="checkbox" checked>
+            <label for="show-divider-motifs">Show motifs between text blocks</label>
+          </div>
+        </section>
+
+        <div class="settings-actions">
+          <button class="panel-button" id="language-toggle" type="button">Español</button>
+          <button class="panel-button" id="copy-link" type="button">Copy shareable link</button>
+          <button class="panel-button" id="copy-values" type="button">Copy tuned values</button>
+          <button class="panel-button primary" id="download-png" type="button">Download PNG</button>
+        </div>
+        <p class="export-status" id="export-status" role="status" aria-live="polite"></p>
+      </aside>
+
+      <div class="stage">
+        <main class="invitation" id="invitation" aria-label="Wedding invitation">
+          <div class="motif-grid" aria-hidden="true"></div>
+          <div class="paper-speckles" aria-hidden="true"></div>
+          <div class="motif-border" aria-hidden="true">
+            <span class="motif-border-edge top"></span>
+            <span class="motif-border-edge bottom"></span>
+            <span class="motif-border-edge left"></span>
+            <span class="motif-border-edge right"></span>
+          </div>
+          <section class="details">
+            <p class="eyebrow" data-en="Join us for the wedding of" data-es="Acompáñanos a celebrar la boda de">
+              Join us for the wedding of
+            </p>
+            <div class="name-block">
+              <h1 class="name">Zahra</h1>
+              <p class="joining-word" aria-label="and">&amp;</p>
+              <h1 class="name">Ejnar</h1>
+            </div>
+
+            <span class="motif-slot">
+              <img class="petals" src="assets/small_graphic_green.png" alt="">
+            </span>
+
+            <p class="date">
+              <span class="date-line" data-en="Saturday, the thirteenth of March" data-es="Sábado, trece de marzo">Saturday, the thirteenth of March</span>
+              <span class="date-line" data-en="two thousand twenty-seven" data-es="dos mil veintisiete">two thousand twenty-seven</span>
+              <span class="date-line" data-en="at four o’clock in the afternoon" data-es="a las cuatro de la tarde">at four o’clock in the afternoon</span>
+            </p>
+
+            <span class="motif-slot second">
+              <img class="petals" src="assets/small_graphic_green.png" alt="">
+            </span>
+
+            <p class="location">
+              <span class="location-line">2273 Alaqua Drive</span>
+              <span class="location-line">Longwood, Florida 32779</span>
+              <span class="location-line reception-line" data-en="Reception to follow" data-es="Recepción a continuación">Reception to follow</span>
+            </p>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script>
+      const root = document.documentElement;
+      const invitation = document.getElementById("invitation");
+      const languageToggle = document.getElementById("language-toggle");
+      const exportStatus = document.getElementById("export-status");
+      const settingsPanel = document.getElementById("settings-panel");
+      const settingsToggle = document.getElementById("settings-toggle");
+      const stage = document.querySelector(".stage");
+      const motifGrid = document.querySelector(".motif-grid");
+      const details = document.querySelector(".details");
+      const themeOptions = document.querySelectorAll('input[name="theme"]');
+      const treatmentInputs = {
+        tile: document.getElementById("treatment-tile"),
+        border: document.getElementById("treatment-border"),
+        paper: document.getElementById("treatment-paper")
+      };
+      const treatmentControls = {
+        tile: [
+          "motif-opacity-control",
+          "motif-tile-size-control",
+          "motif-tile-spacing-control",
+          "motif-grid-rotation-control"
+        ].map((id) => document.getElementById(id)),
+        border: [document.getElementById("motif-border-size-control")],
+        paper: [
+          document.getElementById("paper-speckle-density-control"),
+          document.getElementById("paper-speckle-opacity-control")
+        ]
+      };
+      const paperSpeckles = document.querySelector(".paper-speckles");
+      const rangeInputs = [...document.querySelectorAll('input[type="range"]')];
+      const checkboxInputs = [...document.querySelectorAll('input[type="checkbox"]')];
+      let invalidSharedSettings = false;
+      let language = "en";
+
+      function currentSettings() {
+        return {
+          ranges: Object.fromEntries(rangeInputs.map((input) => [input.id, input.value])),
+          checkboxes: Object.fromEntries(checkboxInputs.map((input) => [input.id, input.checked])),
+          theme: document.querySelector('input[name="theme"]:checked').value
+        };
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return;
+        }
+
+        const copyBuffer = document.createElement("textarea");
+        copyBuffer.value = text;
+        copyBuffer.setAttribute("readonly", "");
+        copyBuffer.style.position = "fixed";
+        copyBuffer.style.opacity = "0";
+        document.body.append(copyBuffer);
+        copyBuffer.select();
+        const copied = document.execCommand("copy");
+        copyBuffer.remove();
+        if (!copied) throw new Error("Clipboard copy was rejected.");
+      }
+
+      function applySharedSettings() {
+        const encodedSettings = new URLSearchParams(window.location.search).get("settings");
+        if (!encodedSettings) return;
+
+        try {
+          const settings = JSON.parse(encodedSettings);
+          if (!settings || typeof settings !== "object" || Array.isArray(settings)) {
+            throw new Error("Settings must be an object.");
+          }
+
+          if (settings.ranges !== undefined) {
+            if (!settings.ranges || typeof settings.ranges !== "object" || Array.isArray(settings.ranges)) {
+              throw new Error("Range settings must be an object.");
+            }
+            for (const [id, value] of Object.entries(settings.ranges)) {
+              const input = document.getElementById(id);
+              const number = Number(value);
+              if (!Number.isFinite(number) ||
+                  (input && (input.type !== "range" || number < Number(input.min) || number > Number(input.max))) ||
+                  (!input && id !== "address-spacing")) {
+                throw new Error(`Invalid range setting: ${id}.`);
+              }
+            }
+          }
+
+          if (settings.checkboxes !== undefined) {
+            if (!settings.checkboxes || typeof settings.checkboxes !== "object" || Array.isArray(settings.checkboxes)) {
+              throw new Error("Checkbox settings must be an object.");
+            }
+            for (const [id, value] of Object.entries(settings.checkboxes)) {
+              if (!checkboxInputs.some((input) => input.id === id) || typeof value !== "boolean") {
+                throw new Error(`Invalid checkbox setting: ${id}.`);
+              }
+            }
+          }
+
+          if (settings.theme !== undefined &&
+              ![...themeOptions].some((option) => option.value === settings.theme)) {
+            throw new Error("Invalid color palette.");
+          }
+
+          for (const [id, value] of Object.entries(settings.ranges || {})) {
+            const input = document.getElementById(id);
+            if (input) input.value = String(value);
+          }
+          for (const [id, value] of Object.entries(settings.checkboxes || {})) {
+            document.getElementById(id).checked = value;
+          }
+          if (settings.theme !== undefined) {
+            for (const option of themeOptions) option.checked = option.value === settings.theme;
+          }
+        } catch (error) {
+          invalidSharedSettings = true;
+          console.error("Loading shared invitation settings failed:", error);
+        }
+      }
+
+      applySharedSettings();
+
+      function updateTheme(theme) {
+        root.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content =
+          theme === "dark" ? "#3c0316" : "#f0e8db";
+      }
+
+      function updateFitScale() {
+        const { width, height } = stage.getBoundingClientRect();
+        const scale = Math.min(1, width / 720, height / 1000);
+        root.style.setProperty("--view-scale", String(scale));
+      }
+
+      const stageObserver = new ResizeObserver(updateFitScale);
+      stageObserver.observe(stage);
+
+      function updateMotifGrid() {
+        const size = Number(document.getElementById("motif-tile-size").value);
+        const spacing = Number(document.getElementById("motif-tile-spacing").value);
+        const columns = Math.ceil(1500 / (size + spacing));
+        const rows = Math.ceil(1500 / (size + spacing));
+        const fragment = document.createDocumentFragment();
+
+        for (let index = 0; index < columns * rows; index += 1) {
+          const motif = document.createElement("img");
+          motif.src = "assets/small_graphic_green.png";
+          motif.alt = "";
+          motif.draggable = false;
+          fragment.append(motif);
+        }
+
+        motifGrid.replaceChildren(fragment);
+        motifGrid.style.gridTemplateColumns = `repeat(${columns}, ${size}px)`;
+        motifGrid.style.gridAutoRows = `${size}px`;
+        motifGrid.style.gap = `${spacing}px`;
+      }
+
+      function updatePaperSpeckles() {
+        const density = Number(document.getElementById("paper-speckle-density").value);
+        let seed = 724193;
+        const random = () => {
+          seed = (seed * 16807) % 2147483647;
+          return (seed - 1) / 2147483646;
+        };
+        const fragment = document.createDocumentFragment();
+
+        for (let index = 0; index < density; index += 1) {
+          const speckle = document.createElement("span");
+          const fiber = index % 7 === 0;
+          const width = fiber ? 2 + random() * 3 : 0.8 + random() * 1.8;
+          const height = fiber ? 0.5 + random() * 0.7 : 0.8 + random() * 1.8;
+          speckle.style.left = `${random() * 100}%`;
+          speckle.style.top = `${random() * 100}%`;
+          speckle.style.width = `${width.toFixed(1)}px`;
+          speckle.style.height = `${height.toFixed(1)}px`;
+          speckle.style.transform = fiber ? `rotate(${Math.round(random() * 180)}deg)` : "";
+          fragment.append(speckle);
+        }
+
+        paperSpeckles.replaceChildren(fragment);
+      }
+
+      function updateTreatments() {
+        for (const [name, input] of Object.entries(treatmentInputs)) {
+          invitation.dataset[name] = String(input.checked);
+          for (const control of treatmentControls[name]) control.hidden = !input.checked;
+        }
+      }
+
+      function setSettingsExpanded(expanded) {
+        settingsPanel.hidden = !expanded;
+        settingsToggle.setAttribute("aria-expanded", String(expanded));
+        document.body.classList.toggle("settings-open", expanded);
+        window.requestAnimationFrame(updateFitScale);
+      }
+
+      settingsToggle.addEventListener("click", () => {
+        setSettingsExpanded(settingsPanel.hidden);
+      });
+
+      document.getElementById("close-settings").addEventListener("click", () => {
+        setSettingsExpanded(false);
+        settingsToggle.focus();
+      });
+
+      for (const slider of document.querySelectorAll('input[type="range"][data-variable]')) {
+        const output = document.getElementById(`${slider.id}-output`);
+        const updateValue = () => {
+          const factor = Number(slider.dataset.factor || 1);
+          const unit = slider.dataset.unit || "";
+          const displayUnit = slider.dataset.displayUnit ?? unit;
+          root.style.setProperty(slider.dataset.variable, `${Number(slider.value) * factor}${unit}`);
+          output.value = `${slider.value}${displayUnit}`;
+          output.textContent = output.value;
+        };
+        slider.addEventListener("input", updateValue);
+        updateValue();
+      }
+
+      function bindRange(id, update) {
+        const slider = document.getElementById(id);
+        const output = document.getElementById(`${id}-output`);
+        const updateRange = () => {
+          const suffix = id.endsWith("opacity") ? "%" :
+            id === "motif-grid-rotation" ? "°" :
+            id === "paper-speckle-density" ? " specks" : " px";
+          output.value = `${slider.value}${suffix}`;
+          output.textContent = output.value;
+          update(Number(slider.value));
+        };
+        slider.addEventListener("input", updateRange);
+        updateRange();
+      }
+
+      bindRange("motif-opacity", (value) => {
+        root.style.setProperty("--motif-grid-opacity", String(value / 100));
+      });
+      bindRange("motif-tile-size", updateMotifGrid);
+      bindRange("motif-tile-spacing", updateMotifGrid);
+      bindRange("motif-grid-rotation", (value) => {
+        root.style.setProperty("--motif-grid-rotation", `${value}deg`);
+      });
+      bindRange("motif-border-size", (value) => {
+        root.style.setProperty("--border-motif-size", `${value}px`);
+      });
+      bindRange("paper-speckle-density", updatePaperSpeckles);
+      bindRange("paper-speckle-opacity", (value) => {
+        root.style.setProperty("--paper-speckle-opacity", String(value / 100));
+      });
+      for (const id of ["pretext-spacing", "name-spacing", "date-spacing"]) {
+        bindRange(id, (value) => {
+          root.style.setProperty(`--${id}`, `${value}px`);
+        });
+      }
+      updateMotifGrid();
+      updatePaperSpeckles();
+
+      for (const input of Object.values(treatmentInputs)) {
+        input.addEventListener("change", updateTreatments);
+      }
+      updateTreatments();
+
+      for (const option of themeOptions) {
+        option.addEventListener("change", () => {
+          if (option.checked) updateTheme(option.value);
+        });
+      }
+      const selectedTheme = [...themeOptions].find((option) => option.checked);
+      if (selectedTheme) updateTheme(selectedTheme.value);
+
+      document.getElementById("show-divider-motifs").addEventListener("change", (event) => {
+        details.dataset.showMotifs = String(event.currentTarget.checked);
+      });
+
+      window.addEventListener("resize", updateFitScale);
+      details.dataset.showMotifs = String(document.getElementById("show-divider-motifs").checked);
+      document.body.classList.toggle("settings-open", !settingsPanel.hidden);
+      updateFitScale();
+      if (invalidSharedSettings) {
+        exportStatus.textContent = "The shared settings link is invalid; default settings were loaded.";
+      }
+
+      languageToggle.addEventListener("click", () => {
+        language = language === "en" ? "es" : "en";
+        document.documentElement.lang = language;
+        for (const text of document.querySelectorAll("[data-en][data-es]")) {
+          text.textContent = text.dataset[language];
+        }
+        languageToggle.textContent = language === "en" ? "Español" : "English";
+      });
+
+      document.getElementById("copy-values").addEventListener("click", async () => {
+        const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
+        const activeTreatments = Object.entries(treatmentInputs)
+          .filter(([, input]) => input.checked)
+          .map(([name]) => name);
+        const values = [
+          `pretext size - ${document.getElementById("pretext-size").value}`,
+          `name size - ${document.getElementById("name-size").value}`,
+          `ampersand size - ${document.getElementById("joining-size").value}`,
+          `script thickness - ${document.getElementById("script-stroke").value}`,
+          `pretext spacing - ${document.getElementById("pretext-spacing").value}px`,
+          `name spacing - ${document.getElementById("name-spacing").value}px`,
+          `date text size - ${document.getElementById("date-size").value}`,
+          `date spacing - ${document.getElementById("date-spacing").value}px`,
+          `address size - ${document.getElementById("address-size").value}`,
+          `divider motif size - ${document.getElementById("motif-size").value}`,
+          `divider motif spacing above and below - ${document.getElementById("motif-vertical-spacing").value}px`,
+          `divider motifs - ${document.getElementById("show-divider-motifs").checked ? "on" : "off"}`,
+          `background treatments - ${activeTreatments.length ? activeTreatments.join(", ") : "none"}`,
+          `background motif opacity - ${document.getElementById("motif-opacity").value}%`,
+          `background motif size - ${document.getElementById("motif-tile-size").value}px`,
+          `background motif spacing - ${document.getElementById("motif-tile-spacing").value}px`,
+          `background motif grid rotation - ${document.getElementById("motif-grid-rotation").value} degrees`,
+          `border motif size - ${document.getElementById("motif-border-size").value}px`,
+          `paper speckle density - ${document.getElementById("paper-speckle-density").value}`,
+          `paper speckle opacity - ${document.getElementById("paper-speckle-opacity").value}%`,
+          `color palette - ${selectedTheme}`,
+          `content scale - ${document.getElementById("canvas-scale").value}%`,
+          `corner radius - ${document.getElementById("card-radius").value}px`
+        ].join("\n");
+
+        try {
+          await copyText(values);
+          exportStatus.textContent = "Tuned values copied.";
+        } catch (error) {
+          exportStatus.textContent = "Could not copy values. Please select and copy them manually.";
+          console.error("Copying invitation values failed:", error);
+        }
+      });
+
+      document.getElementById("copy-link").addEventListener("click", async () => {
+        const shareUrl = new URL(window.location.href);
+        shareUrl.searchParams.set("settings", JSON.stringify(currentSettings()));
+        try {
+          await copyText(shareUrl.toString());
+          exportStatus.textContent = "Shareable link copied.";
+        } catch (error) {
+          exportStatus.textContent = "Could not copy the shareable link.";
+          console.error("Copying the invitation share link failed:", error);
+        }
+      });
+
+      document.getElementById("download-png").addEventListener("click", async () => {
+        exportStatus.textContent = "Preparing your PNG…";
+        try {
+          await document.fonts.ready;
+          document.body.classList.add("exporting");
+          const canvas = await html2canvas(invitation, {
+            backgroundColor: getComputedStyle(invitation).backgroundColor,
+            scale: 2,
+            width: 720,
+            height: 1000,
+            windowWidth: 800,
+            logging: false
+          });
+          const blob = await new Promise((resolve, reject) => {
+            canvas.toBlob((result) => {
+              if (result) resolve(result);
+              else reject(new Error("The browser could not create the PNG."));
+            }, "image/png");
+          });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = `zahra-and-ejnar-wedding-${language}.png`;
+          link.click();
+          URL.revokeObjectURL(url);
+          exportStatus.textContent = "PNG downloaded.";
+        } catch (error) {
+          exportStatus.textContent = "Could not create the PNG. Please try again.";
+          console.error("Invitation PNG export failed:", error);
+        } finally {
+          document.body.classList.remove("exporting");
+        }
+      });
+    </script>
+  </body>
+</html>
