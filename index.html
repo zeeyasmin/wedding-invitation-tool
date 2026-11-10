@@ -857,6 +857,7 @@
         <div class="settings-actions">
           <button class="panel-button" id="language-toggle" type="button">Español</button>
           <button class="panel-button" id="copy-link" type="button">Copy shareable link</button>
+          <button class="panel-button" id="copy-short-link" type="button">Copy short link (is.gd)</button>
           <button class="panel-button" id="copy-values" type="button">Copy tuned values</button>
           <button class="panel-button primary" id="download-png" type="button">Download PNG</button>
         </div>
@@ -921,6 +922,7 @@
     </div>
 
     <script>
+      (async () => {
       const root = document.documentElement;
       const invitation = document.getElementById("invitation");
       const languageToggle = document.getElementById("language-toggle");
@@ -950,16 +952,24 @@
         terracotta: { primary: "#a9450c", secondary: "#dbcfbd", accent: "#b385bb" },
         lavender: { primary: "#b385bb", secondary: "#400911", accent: "#f0e8db" }
       };
+      const legacyPresets = {
+        paper: { primary: "#f0e8db", secondary: "#3c0316", accent: "#7d8779" },
+        wine: { primary: "#3c0316", secondary: "#f0e8db", accent: "#7d8779" },
+        sage: { primary: "#7d8779", secondary: "#3c0316", accent: "#400911" },
+        harvest: { primary: "#dbcfbd", secondary: "#400911", accent: "#5a5d18" },
+        terracotta: { primary: "#a9450c", secondary: "#f0e8db", accent: "#dbcfbd" },
+        lavender: { primary: "#b385bb", secondary: "#400911", accent: "#3c0316" }
+      };
       const scriptFonts = {
         "cecily": '"Cecily", cursive',
         "italianno": '"Italianno", cursive',
         "tangerine": '"Tangerine", cursive'
       };
       const legacyThemes = {
-        light: "#f0e8db",
-        dark: "#3c0316",
-        sage: "#7d8779",
-        harvest: "#dbcfbd"
+        light: legacyPresets.paper,
+        dark: legacyPresets.wine,
+        sage: legacyPresets.sage,
+        harvest: legacyPresets.harvest
       };
       const treatmentInputs = {
         tile: document.getElementById("treatment-tile"),
@@ -1005,6 +1015,90 @@
         };
       }
 
+      async function compressSettings(settings) {
+        if (!("CompressionStream" in window)) {
+          throw new Error("This browser does not support compressed invitation links.");
+        }
+
+        const compressedStream = new Blob([JSON.stringify(settings)])
+          .stream()
+          .pipeThrough(new CompressionStream("gzip"));
+        const compressedBytes = new Uint8Array(await new Response(compressedStream).arrayBuffer());
+        let binary = "";
+        for (const byte of compressedBytes) binary += String.fromCharCode(byte);
+        return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+      }
+
+      async function decompressSettings(encodedSettings) {
+        if (!("DecompressionStream" in window)) {
+          throw new Error("This browser does not support compressed invitation links.");
+        }
+
+        const base64 = encodedSettings.replace(/-/g, "+").replace(/_/g, "/");
+        const binary = atob(base64.padEnd(Math.ceil(base64.length / 4) * 4, "="));
+        const compressedBytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+        const decompressedStream = new Blob([compressedBytes])
+          .stream()
+          .pipeThrough(new DecompressionStream("gzip"));
+        return new Response(decompressedStream).text();
+      }
+
+      async function createShareUrl() {
+        const pageUrl = window.location.protocol === "file:"
+          ? "https://zeeyasmin.github.io/wedding-invitation-tool/"
+          : window.location.href;
+        const shareUrl = new URL(pageUrl);
+        shareUrl.searchParams.delete("settings");
+        shareUrl.searchParams.set("s", await compressSettings(currentSettings()));
+        return shareUrl.toString();
+      }
+
+      function shortenWithIsGd(longUrl) {
+        return new Promise((resolve, reject) => {
+          const callbackName = `isgd_callback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+          const apiUrl = new URL("https://is.gd/create.php");
+          const script = document.createElement("script");
+          let timeoutId;
+          let settled = false;
+
+          const cleanup = () => {
+            if (settled) return;
+            settled = true;
+            window.clearTimeout(timeoutId);
+            delete window[callbackName];
+            script.remove();
+          };
+
+          window[callbackName] = (result) => {
+            cleanup();
+            try {
+              const shortUrl = new URL(result?.shorturl);
+              if (shortUrl.origin !== "https://is.gd") {
+                throw new Error("is.gd returned an unexpected link.");
+              }
+              resolve(shortUrl.toString());
+            } catch (error) {
+              reject(new Error(result?.errormessage || error.message || "is.gd did not return a short link."));
+            }
+          };
+
+          apiUrl.searchParams.set("format", "json");
+          apiUrl.searchParams.set("callback", callbackName);
+          apiUrl.searchParams.set("url", longUrl);
+          script.async = true;
+          script.src = apiUrl.toString();
+          script.onerror = () => {
+            cleanup();
+            reject(new Error("Could not reach the is.gd shortening service."));
+          };
+          timeoutId = window.setTimeout(() => {
+            cleanup();
+            reject(new Error("The is.gd shortening request timed out."));
+          }, 15000);
+          document.head.append(script);
+        });
+      }
+
       async function copyText(text) {
         if (navigator.clipboard?.writeText) {
           await navigator.clipboard.writeText(text);
@@ -1043,12 +1137,15 @@
         palettePreset.value = matchingPreset?.[0] || "custom";
       }
 
-      function applySharedSettings() {
-        const encodedSettings = new URLSearchParams(window.location.search).get("settings");
-        if (!encodedSettings) return;
-
+      async function applySharedSettings() {
         try {
-          const settings = JSON.parse(encodedSettings);
+          const params = new URLSearchParams(window.location.search);
+          const compressedSettings = params.get("s");
+          const legacySettings = params.get("settings");
+          if (!compressedSettings && !legacySettings) return;
+          const settings = JSON.parse(
+            compressedSettings ? await decompressSettings(compressedSettings) : legacySettings
+          );
           if (!settings || typeof settings !== "object" || Array.isArray(settings)) {
             throw new Error("Settings must be an object.");
           }
@@ -1082,7 +1179,8 @@
 
           if (settings.preset !== undefined &&
               settings.preset !== "custom" &&
-              !Object.hasOwn(palettePresets, settings.preset)) {
+              !Object.hasOwn(palettePresets, settings.preset) &&
+              !Object.hasOwn(legacyPresets, settings.preset)) {
             throw new Error("Invalid palette preset.");
           }
           if (settings.colors !== undefined) {
@@ -1096,8 +1194,7 @@
             }
           }
           if (settings.theme !== undefined) {
-            const oldTheme = legacyThemes[settings.theme] || settings.theme;
-            if (!Object.hasOwn(palettePresets, oldTheme) && !colorOptions.includes(oldTheme)) {
+            if (!legacyThemes[settings.theme] && !colorOptions.includes(settings.theme)) {
               throw new Error("Invalid color palette.");
             }
           }
@@ -1126,14 +1223,16 @@
           }
           let colors = { ...palettePresets[palettePreset.value] };
           if (settings.preset && settings.preset !== "custom") {
-            colors = { ...palettePresets[settings.preset] };
+            colors = { ...(palettePresets[settings.preset] || legacyPresets[settings.preset]) };
           } else if (settings.theme !== undefined) {
-            const oldTheme = legacyThemes[settings.theme] || settings.theme;
-            const matchingPreset = Object.entries(palettePresets).find(([, preset]) => preset.primary === oldTheme);
-            colors = { ...(palettePresets[oldTheme] || matchingPreset?.[1] || palettePresets.wine) };
-            if (settings.fontColor === undefined && legacyThemes[settings.theme]) {
-              colors.secondary = settings.theme === "light" ? "#3c0316" : "#f0e8db";
-            }
+            const oldTheme = legacyThemes[settings.theme];
+            const matchingPreset = Object.values(palettePresets).find((preset) =>
+              preset.primary === settings.theme);
+            colors = { ...(oldTheme || matchingPreset || {
+              primary: settings.theme,
+              secondary: "#f0e8db",
+              accent: "#7d8779"
+            }) };
           }
           if (settings.colors) colors = { ...colors, ...settings.colors };
           if (settings.fontColor !== undefined) colors.secondary = settings.fontColor;
@@ -1153,7 +1252,7 @@
         }
       }
 
-      applySharedSettings();
+      await applySharedSettings();
 
       function updateFitScale() {
         const { width, height } = stage.getBoundingClientRect();
@@ -1433,14 +1532,24 @@
       });
 
       document.getElementById("copy-link").addEventListener("click", async () => {
-        const shareUrl = new URL(window.location.href);
-        shareUrl.searchParams.set("settings", JSON.stringify(currentSettings()));
         try {
-          await copyText(shareUrl.toString());
+          await copyText(await createShareUrl());
           exportStatus.textContent = "Shareable link copied.";
         } catch (error) {
-          exportStatus.textContent = "Could not copy the shareable link.";
+          exportStatus.textContent = error.message || "Could not create the shareable link.";
           console.error("Copying the invitation share link failed:", error);
+        }
+      });
+
+      document.getElementById("copy-short-link").addEventListener("click", async () => {
+        exportStatus.textContent = "Creating short link…";
+        try {
+          const shortUrl = await shortenWithIsGd(await createShareUrl());
+          await copyText(shortUrl);
+          exportStatus.textContent = "Short link copied.";
+        } catch (error) {
+          exportStatus.textContent = error.message || "Could not create the short link.";
+          console.error("Creating the invitation short link failed:", error);
         }
       });
 
@@ -1477,6 +1586,7 @@
           document.body.classList.remove("exporting");
         }
       });
+      })();
     </script>
   </body>
 </html>
