@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,17 +12,16 @@
     <link rel="preconnect" href="https://d1olp21zen30mx.cloudfront.net">
     <link rel="preconnect" href="https://d2mx2n54ydq2ht.cloudfront.net" crossorigin>
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=Cecily:Regular">
-    <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=ED%20Drayton:Regular">
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=MaisonVoyages:CapsRegular">
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=Brandon%20Grotesque:Medium">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alex+Brush&amp;family=Allura&amp;family=Caveat&amp;family=Dancing+Script&amp;family=Great+Vibes&amp;family=Homemade+Apple&amp;family=Italianno&amp;family=Mrs+Saint+Delafield&amp;family=Parisienne&amp;family=Petit+Formal+Script&amp;family=Pinyon+Script&amp;family=Rouge+Script&amp;family=Sacramento&amp;family=Satisfy&amp;family=Style+Script&amp;family=Tangerine&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno&amp;family=Tangerine&amp;display=swap">
     <style>
       :root {
         color-scheme: light;
 
         /* Edit these values to customize the invitation. */
-        --paper: #f0e8db;
-        --ink: #3c0316;
+        --paper: #dbcfbd;
+        --ink: #7d8779;
         --accent: #7d8779;
         --surround: #e6e7e5;
         --panel-border: rgb(60 3 22 / 14%);
@@ -31,48 +30,32 @@
         --ui-paper: #f0e8db;
         --ui-ink: #3c0316;
         --ui-accent: #7d8779;
-        --name-size: 107px;
+        --name-size: 94px;
         --pretext-size: 52px;
         --joining-size: 102px;
         --address-size: 22px;
-        --date-size: 51px;
+        --date-size: 53px;
         --motif-size: 86px;
-        --card-radius: 61px;
-        --script-stroke: 0.3px;
+        --card-radius: 70px;
+        --script-stroke: 0.5px;
         --canvas-scale: 0.9;
         --motif-grid-opacity: 0.38;
-        --paper-speckle-opacity: 0.63;
+        --paper-speckle-opacity: 0.75;
         --frame-color: #7d8779;
-        --frame-thickness: 20px;
+        --frame-thickness: 23px;
         --script-font-family: "Cecily", cursive;
-        --motif-image: url("assets/small_graphic_green.png");
+        --ampersand-font-family: "Cecily", cursive;
+        --motif-image: url("assets/motif_7d8779.png");
         --line-border-thickness: 2px;
-        --pretext-spacing: 14px;
-        --name-spacing: 14px;
+        --line-border-offset: 20px;
+        --motif-border-offset: 12px;
+        --pretext-spacing: 31px;
+        --name-spacing: 5px;
         --date-spacing: 14px;
-        --motif-vertical-spacing: 0px;
+        --motif-vertical-spacing: 4px;
         --view-scale: 1;
-        --border-motif-size: 44px;
-        --motif-grid-rotation: 0deg;
-      }
-
-      :root[data-theme="dark"] {
-        --paper: #3c0316;
-        --ink: #f0e8db;
-      }
-
-      :root[data-theme="light"] {
-        --paper: #f0e8db;
-        --ink: #3c0316;
-        --accent: #7d8779;
-        --motif-image: url("assets/small_graphic_green.png");
-      }
-
-      :root[data-theme="sage"] {
-        --paper: #7d8779;
-        --ink: #f0e8db;
-        --accent: #3c0316;
-        --motif-image: url("assets/small_graphic_red.png");
+        --border-motif-size: 47px;
+        --motif-grid-rotation: 20deg;
       }
 
       * {
@@ -197,6 +180,15 @@
         transform-origin: center;
       }
 
+      .invitation-frame::after {
+        position: absolute;
+        z-index: 3;
+        inset: 0;
+        border: 1px dashed #555;
+        content: "";
+        pointer-events: none;
+      }
+
       .invitation[data-line="true"] .line-border {
         display: block;
       }
@@ -204,10 +196,10 @@
       .line-border {
         position: absolute;
         z-index: 1;
-        inset: 20px;
+        inset: var(--line-border-offset);
         display: none;
         border: var(--line-border-thickness) solid var(--accent);
-        border-radius: max(0px, calc(var(--card-radius) - 20px));
+        border-radius: max(0px, calc(var(--card-radius) - var(--line-border-offset)));
         pointer-events: none;
       }
 
@@ -253,7 +245,7 @@
       .motif-border {
         z-index: 1;
         position: absolute;
-        inset: 9px;
+        inset: var(--motif-border-offset);
         display: none;
         pointer-events: none;
       }
@@ -310,6 +302,10 @@
         transform: none;
       }
 
+      .exporting .invitation-frame::after {
+        display: none;
+      }
+
       .details {
         position: relative;
         z-index: 2;
@@ -357,7 +353,7 @@
         flex: 0 0 104px;
         place-items: center;
         margin: 0;
-        font-family: var(--script-font-family);
+        font-family: var(--ampersand-font-family);
         font-size: var(--joining-size);
         font-weight: 400;
         -webkit-text-stroke: var(--script-stroke) currentColor;
@@ -499,28 +495,6 @@
         text-transform: uppercase;
       }
 
-      .theme-options {
-        display: flex;
-        gap: 16px;
-        margin-top: 8px;
-      }
-
-      .theme-options label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 14px;
-      }
-
-      .theme-options input {
-        width: auto;
-        accent-color: var(--ui-accent);
-      }
-
-      .theme-control {
-        display: block;
-      }
-
       .settings-actions {
         display: flex;
         flex-wrap: wrap;
@@ -639,6 +613,60 @@
       <aside class="settings-panel" id="settings-panel" aria-label="Invitation settings" hidden>
         <button class="panel-close" id="close-settings" type="button" aria-label="Hide settings">&times;</button>
 
+        <section class="settings-section" aria-labelledby="colors-heading">
+          <h3 id="colors-heading">Colors</h3>
+          <div class="control">
+            <label for="palette-preset">Palette preset</label>
+            <select id="palette-preset">
+              <option value="custom" selected>Custom (edit colors below)</option>
+              <option value="burgundy">Burgundy garden</option>
+              <option value="cream">Cream and olive</option>
+              <option value="olive">Olive and lavender</option>
+              <option value="terracotta">Terracotta and wine</option>
+              <option value="lavender">Lavender and terracotta</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="primary-color">Primary · card background</label>
+            <select id="primary-color">
+              <option value="#f0e8db">Paper (#F0E8DB)</option>
+              <option value="#3c0316">Wine (#3C0316)</option>
+              <option value="#7d8779">Sage (#7D8779)</option>
+              <option value="#400911">Burgundy (#400911)</option>
+              <option value="#5a5d18">Olive (#5A5D18)</option>
+              <option value="#dbcfbd" selected>Cream (#DBCFBD)</option>
+              <option value="#a9450c">Terracotta (#A9450C)</option>
+              <option value="#b385bb">Lavender (#B385BB)</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="secondary-color">Secondary · font and frame</label>
+            <select id="secondary-color">
+              <option value="#f0e8db">Paper (#F0E8DB)</option>
+              <option value="#3c0316">Wine (#3C0316)</option>
+              <option value="#7d8779" selected>Sage (#7D8779)</option>
+              <option value="#400911">Burgundy (#400911)</option>
+              <option value="#5a5d18">Olive (#5A5D18)</option>
+              <option value="#dbcfbd">Cream (#DBCFBD)</option>
+              <option value="#a9450c">Terracotta (#A9450C)</option>
+              <option value="#b385bb">Lavender (#B385BB)</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="accent-color">Accent · reception and motifs</label>
+            <select id="accent-color">
+              <option value="#f0e8db">Paper (#F0E8DB)</option>
+              <option value="#3c0316">Wine (#3C0316)</option>
+              <option value="#7d8779" selected>Sage (#7D8779)</option>
+              <option value="#400911">Burgundy (#400911)</option>
+              <option value="#5a5d18">Olive (#5A5D18)</option>
+              <option value="#dbcfbd">Cream (#DBCFBD)</option>
+              <option value="#a9450c">Terracotta (#A9450C)</option>
+              <option value="#b385bb">Lavender (#B385BB)</option>
+            </select>
+          </div>
+        </section>
+
         <section class="settings-section" aria-labelledby="background-heading">
           <h3 id="background-heading">Background</h3>
           <div class="control checkbox-control">
@@ -671,13 +699,36 @@
             <input id="motif-grid-jitter" type="range" min="0" max="24" step="1" value="0">
           </div>
           <div class="control checkbox-control">
+            <input id="treatment-paper" type="checkbox" checked>
+            <label for="treatment-paper">Handmade paper speckles</label>
+          </div>
+          <div class="control" id="paper-speckle-density-control" hidden>
+            <label for="paper-speckle-density">Paper speckle density</label>
+            <output id="paper-speckle-density-output">500 specks</output>
+            <input id="paper-speckle-density" type="range" min="0" max="1000" step="50" value="500">
+          </div>
+          <div class="control" id="paper-speckle-opacity-control" hidden>
+            <label for="paper-speckle-opacity">Paper speckle opacity</label>
+            <output id="paper-speckle-opacity-output">75%</output>
+            <input id="paper-speckle-opacity" type="range" min="0" max="100" step="1" value="75">
+          </div>
+        </section>
+
+        <section class="settings-section" aria-labelledby="borders-heading">
+          <h3 id="borders-heading">Borders</h3>
+          <div class="control checkbox-control">
             <input id="treatment-border" type="checkbox" checked>
             <label for="treatment-border">Thin motif border</label>
           </div>
           <div class="control" id="motif-border-size-control" hidden>
             <label for="motif-border-size">Border motif size / density</label>
-            <output id="motif-border-size-output">44 px</output>
-            <input id="motif-border-size" type="range" min="24" max="96" step="1" value="44">
+            <output id="motif-border-size-output">47 px</output>
+            <input id="motif-border-size" type="range" min="24" max="96" step="1" value="47">
+          </div>
+          <div class="control" id="motif-border-offset-control" hidden>
+            <label for="motif-border-offset">Motif border offset</label>
+            <output id="motif-border-offset-output">12 px</output>
+            <input id="motif-border-offset" type="range" min="0" max="80" step="1" value="12">
           </div>
           <div class="control checkbox-control">
             <input id="treatment-line" type="checkbox">
@@ -688,27 +739,10 @@
             <output id="line-border-thickness-output">2 px</output>
             <input id="line-border-thickness" type="range" min="1" max="12" step="1" value="2">
           </div>
-          <div class="control checkbox-control">
-            <input id="treatment-paper" type="checkbox">
-            <label for="treatment-paper">Handmade paper speckles</label>
-          </div>
-          <div class="control" id="paper-speckle-density-control" hidden>
-            <label for="paper-speckle-density">Paper speckle density</label>
-            <output id="paper-speckle-density-output">500 specks</output>
-            <input id="paper-speckle-density" type="range" min="0" max="500" step="10" value="500">
-          </div>
-          <div class="control" id="paper-speckle-opacity-control" hidden>
-            <label for="paper-speckle-opacity">Paper speckle opacity</label>
-            <output id="paper-speckle-opacity-output">63%</output>
-            <input id="paper-speckle-opacity" type="range" min="0" max="100" step="1" value="63">
-          </div>
-          <div class="control theme-control">
-            <span>Color palette</span>
-            <div class="theme-options" role="radiogroup" aria-label="Color palette">
-              <label><input type="radio" name="theme" value="light"> Paper</label>
-              <label><input type="radio" name="theme" value="dark" checked> Wine</label>
-              <label><input type="radio" name="theme" value="sage"> Sage</label>
-            </div>
+          <div class="control" id="line-border-offset-control" hidden>
+            <label for="line-border-offset">Line border offset</label>
+            <output id="line-border-offset-output">20 px</output>
+            <input id="line-border-offset" type="range" min="0" max="80" step="1" value="20">
           </div>
         </section>
 
@@ -721,21 +755,13 @@
           </div>
           <div class="control">
             <label for="card-radius">Corner radius</label>
-            <output id="card-radius-output">61 px</output>
-            <input id="card-radius" type="range" min="0" max="120" step="1" value="61" data-variable="--card-radius" data-unit="px">
-          </div>
-          <div class="control">
-            <label for="frame-color">Export frame color</label>
-            <select id="frame-color">
-              <option value="#f0e8db">Paper</option>
-              <option value="#3c0316">Wine</option>
-              <option value="#7d8779" selected>Sage</option>
-            </select>
+            <output id="card-radius-output">70 px</output>
+            <input id="card-radius" type="range" min="0" max="120" step="1" value="70" data-variable="--card-radius" data-unit="px">
           </div>
           <div class="control">
             <label for="frame-thickness">Frame thickness</label>
-            <output id="frame-thickness-output">20 px</output>
-            <input id="frame-thickness" type="range" min="0" max="80" step="1" value="20" data-variable="--frame-thickness" data-unit="px">
+            <output id="frame-thickness-output">23 px</output>
+            <input id="frame-thickness" type="range" min="0" max="80" step="1" value="23" data-variable="--frame-thickness" data-unit="px">
           </div>
         </section>
 
@@ -745,22 +771,15 @@
             <label for="script-font">Script font</label>
             <select id="script-font">
               <option value="cecily" selected>Cecily</option>
-              <option value="ed-drayton">ED Drayton</option>
-              <option value="parisienne">Parisienne</option>
-              <option value="great-vibes">Great Vibes</option>
-              <option value="allura">Allura</option>
-              <option value="pinyon-script">Pinyon Script</option>
-              <option value="mrs-saint-delafield">Mrs Saint Delafield</option>
-              <option value="alex-brush">Alex Brush</option>
-              <option value="caveat">Caveat</option>
-              <option value="dancing-script">Dancing Script</option>
-              <option value="homemade-apple">Homemade Apple</option>
               <option value="italianno">Italianno</option>
-              <option value="petit-formal-script">Petit Formal Script</option>
-              <option value="rouge-script">Rouge Script</option>
-              <option value="sacramento">Sacramento</option>
-              <option value="satisfy">Satisfy</option>
-              <option value="style-script">Style Script</option>
+              <option value="tangerine">Tangerine</option>
+            </select>
+          </div>
+          <div class="control">
+            <label for="ampersand-font">Ampersand font</label>
+            <select id="ampersand-font">
+              <option value="cecily" selected>Cecily</option>
+              <option value="italianno">Italianno</option>
               <option value="tangerine">Tangerine</option>
             </select>
           </div>
@@ -771,18 +790,18 @@
           </div>
           <div class="control">
             <label for="script-stroke">Script thickness</label>
-            <output id="script-stroke-output">0.3 px</output>
-            <input id="script-stroke" type="range" min="0" max="1.2" step="0.05" value="0.3" data-variable="--script-stroke" data-unit="px">
+            <output id="script-stroke-output">0.5 px</output>
+            <input id="script-stroke" type="range" min="0" max="1.2" step="0.05" value="0.5" data-variable="--script-stroke" data-unit="px">
           </div>
           <div class="control">
             <label for="pretext-spacing">Spacing after pretext</label>
-            <output id="pretext-spacing-output">14 px</output>
-            <input id="pretext-spacing" type="range" min="0" max="40" step="1" value="14">
+            <output id="pretext-spacing-output">31 px</output>
+            <input id="pretext-spacing" type="range" min="0" max="120" step="1" value="31">
           </div>
           <div class="control">
             <label for="name-size">Name size</label>
-            <output id="name-size-output">107 px</output>
-            <input id="name-size" type="range" min="96" max="120" step="1" value="107" data-variable="--name-size" data-unit="px">
+            <output id="name-size-output">94 px</output>
+            <input id="name-size" type="range" min="48" max="120" step="1" value="94" data-variable="--name-size" data-unit="px">
           </div>
           <div class="control">
             <label for="joining-size">Ampersand size</label>
@@ -791,13 +810,13 @@
           </div>
           <div class="control">
             <label for="name-spacing">Spacing after names</label>
-            <output id="name-spacing-output">14 px</output>
-            <input id="name-spacing" type="range" min="0" max="40" step="1" value="14">
+            <output id="name-spacing-output">5 px</output>
+            <input id="name-spacing" type="range" min="0" max="40" step="1" value="5">
           </div>
           <div class="control">
             <label for="date-size">Date text size</label>
-            <output id="date-size-output">51 px</output>
-            <input id="date-size" type="range" min="32" max="56" step="1" value="51" data-variable="--date-size" data-unit="px">
+            <output id="date-size-output">53 px</output>
+            <input id="date-size" type="range" min="32" max="56" step="1" value="53" data-variable="--date-size" data-unit="px">
           </div>
           <div class="control">
             <label for="date-spacing">Spacing after date</label>
@@ -820,8 +839,8 @@
           </div>
           <div class="control">
             <label for="motif-vertical-spacing">Spacing above &amp; below divider motifs</label>
-            <output id="motif-vertical-spacing-output">0 px</output>
-            <input id="motif-vertical-spacing" type="range" min="0" max="80" step="1" value="0" data-variable="--motif-vertical-spacing" data-unit="px">
+            <output id="motif-vertical-spacing-output">4 px</output>
+            <input id="motif-vertical-spacing" type="range" min="0" max="80" step="1" value="4" data-variable="--motif-vertical-spacing" data-unit="px">
           </div>
           <div class="control">
             <label for="upper-motif-count">Upper divider icons</label>
@@ -875,8 +894,10 @@
               </span>
 
               <p class="date">
-                <span class="date-line" data-en="Saturday, the thirteenth of March" data-es="Sábado, trece de marzo">Saturday, the thirteenth of March</span>
-                <span class="date-line" data-en="two thousand twenty-seven" data-es="dos mil veintisiete">two thousand twenty-seven</span>
+                <span class="date-line" data-en="Saturday" data-es="Sábado">Saturday</span>
+                <span class="date-line" data-en="March 13, 2027" data-es="13 de Marzo de 2027">March 13, 2027</span>
+                <!-- <span class="date-line" data-en="Saturday, the thirteenth of March" data-es="Sábado, trece de marzo">Saturday, the thirteenth of March</span> -->
+                <!-- <span class="date-line" data-en="two thousand twenty-seven" data-es="dos mil veintisiete">two thousand twenty-seven</span> -->
                 <span class="date-line" data-en="at four o’clock in the afternoon" data-es="a las cuatro de la tarde">at four o’clock in the afternoon</span>
               </p>
 
@@ -909,28 +930,36 @@
       const stage = document.querySelector(".stage");
       const motifGrid = document.querySelector(".motif-grid");
       const invitationFrame = document.getElementById("invitation-frame");
-      const frameColor = document.getElementById("frame-color");
+      const palettePreset = document.getElementById("palette-preset");
+      const colorControls = {
+        primary: document.getElementById("primary-color"),
+        secondary: document.getElementById("secondary-color"),
+        accent: document.getElementById("accent-color")
+      };
       const scriptFont = document.getElementById("script-font");
-      const themeOptions = document.querySelectorAll('input[name="theme"]');
+      const ampersandFont = document.getElementById("ampersand-font");
+      const colorOptions = [...colorControls.primary.options].map((option) => option.value);
+      const motifImages = Object.fromEntries(colorOptions.map((color) => [
+        color,
+        `assets/motif_${color.slice(1)}.png`
+      ]));
+      const palettePresets = {
+        burgundy: { primary: "#400911", secondary: "#dbcfbd", accent: "#5a5d18" },
+        cream: { primary: "#dbcfbd", secondary: "#400911", accent: "#7d8779" },
+        olive: { primary: "#5a5d18", secondary: "#f0e8db", accent: "#b385bb" },
+        terracotta: { primary: "#a9450c", secondary: "#f0e8db", accent: "#400911" },
+        lavender: { primary: "#b385bb", secondary: "#400911", accent: "#a9450c" }
+      };
       const scriptFonts = {
         "cecily": '"Cecily", cursive',
-        "ed-drayton": '"ED Drayton", cursive',
-        "parisienne": '"Parisienne", cursive',
-        "great-vibes": '"Great Vibes", cursive',
-        "allura": '"Allura", cursive',
-        "pinyon-script": '"Pinyon Script", cursive',
-        "mrs-saint-delafield": '"Mrs Saint Delafield", cursive',
-        "alex-brush": '"Alex Brush", cursive',
-        "caveat": '"Caveat", cursive',
-        "dancing-script": '"Dancing Script", cursive',
-        "homemade-apple": '"Homemade Apple", cursive',
         "italianno": '"Italianno", cursive',
-        "petit-formal-script": '"Petit Formal Script", cursive',
-        "rouge-script": '"Rouge Script", cursive',
-        "sacramento": '"Sacramento", cursive',
-        "satisfy": '"Satisfy", cursive',
-        "style-script": '"Style Script", cursive',
         "tangerine": '"Tangerine", cursive'
+      };
+      const legacyThemes = {
+        light: "#f0e8db",
+        dark: "#3c0316",
+        sage: "#7d8779",
+        harvest: "#dbcfbd"
       };
       const treatmentInputs = {
         tile: document.getElementById("treatment-tile"),
@@ -946,12 +975,18 @@
           "motif-grid-rotation-control",
           "motif-grid-jitter-control"
         ].map((id) => document.getElementById(id)),
-        border: [document.getElementById("motif-border-size-control")],
+        border: [
+          document.getElementById("motif-border-size-control"),
+          document.getElementById("motif-border-offset-control")
+        ],
         paper: [
           document.getElementById("paper-speckle-density-control"),
           document.getElementById("paper-speckle-opacity-control")
         ],
-        line: [document.getElementById("line-border-thickness-control")]
+        line: [
+          document.getElementById("line-border-thickness-control"),
+          document.getElementById("line-border-offset-control")
+        ]
       };
       const paperSpeckles = document.querySelector(".paper-speckles");
       const rangeInputs = [...document.querySelectorAll('input[type="range"]')];
@@ -963,9 +998,10 @@
         return {
           ranges: Object.fromEntries(rangeInputs.map((input) => [input.id, input.value])),
           checkboxes: Object.fromEntries(checkboxInputs.map((input) => [input.id, input.checked])),
-          theme: document.querySelector('input[name="theme"]:checked').value,
-          frameColor: frameColor.value,
-          scriptFont: scriptFont.value
+          preset: palettePreset.value,
+          colors: Object.fromEntries(Object.entries(colorControls).map(([role, control]) => [role, control.value])),
+          scriptFont: scriptFont.value,
+          ampersandFont: ampersandFont.value
         };
       }
 
@@ -985,6 +1021,26 @@
         const copied = document.execCommand("copy");
         copyBuffer.remove();
         if (!copied) throw new Error("Clipboard copy was rejected.");
+      }
+
+      function updateColors() {
+        const primary = colorControls.primary.value;
+        const secondary = colorControls.secondary.value;
+        const accent = colorControls.accent.value;
+        const motifSrc = motifImages[accent];
+        root.style.setProperty("--paper", primary);
+        root.style.setProperty("--ink", secondary);
+        root.style.setProperty("--frame-color", secondary);
+        root.style.setProperty("--accent", accent);
+        root.style.setProperty("--motif-image", `url("${motifSrc}")`);
+        for (const motif of invitation.querySelectorAll(".petals")) motif.src = motifSrc;
+        updateMotifGrid();
+      }
+
+      function updatePresetSelection() {
+        const matchingPreset = Object.entries(palettePresets).find(([, colors]) =>
+          Object.entries(colors).every(([role, color]) => colorControls[role].value === color));
+        palettePreset.value = matchingPreset?.[0] || "custom";
       }
 
       function applySharedSettings() {
@@ -1024,16 +1080,35 @@
             }
           }
 
-          if (settings.theme !== undefined &&
-              ![...themeOptions].some((option) => option.value === settings.theme)) {
-            throw new Error("Invalid color palette.");
+          if (settings.preset !== undefined &&
+              settings.preset !== "custom" &&
+              !Object.hasOwn(palettePresets, settings.preset)) {
+            throw new Error("Invalid palette preset.");
           }
-          if (settings.frameColor !== undefined &&
-              ![...frameColor.options].some((option) => option.value === settings.frameColor)) {
-            throw new Error("Invalid frame color.");
+          if (settings.colors !== undefined) {
+            if (!settings.colors || typeof settings.colors !== "object" || Array.isArray(settings.colors)) {
+              throw new Error("Palette colors must be an object.");
+            }
+            for (const [role, color] of Object.entries(settings.colors)) {
+              if (!Object.hasOwn(colorControls, role) || !colorOptions.includes(color)) {
+                throw new Error(`Invalid ${role} palette color.`);
+              }
+            }
+          }
+          if (settings.theme !== undefined) {
+            const oldTheme = legacyThemes[settings.theme] || settings.theme;
+            if (!Object.hasOwn(palettePresets, oldTheme) && !colorOptions.includes(oldTheme)) {
+              throw new Error("Invalid color palette.");
+            }
+          }
+          if (settings.fontColor !== undefined && !colorOptions.includes(settings.fontColor)) {
+            throw new Error("Invalid font color.");
           }
           if (settings.scriptFont !== undefined && !Object.hasOwn(scriptFonts, settings.scriptFont)) {
             throw new Error("Invalid script font.");
+          }
+          if (settings.ampersandFont !== undefined && !Object.hasOwn(scriptFonts, settings.ampersandFont)) {
+            throw new Error("Invalid ampersand font.");
           }
 
           for (const [id, value] of Object.entries(settings.ranges || {})) {
@@ -1049,11 +1124,29 @@
             document.getElementById("upper-motif-count").value = "0";
             document.getElementById("lower-motif-count").value = "0";
           }
-          if (settings.theme !== undefined) {
-            for (const option of themeOptions) option.checked = option.value === settings.theme;
+          let colors = { ...palettePresets[palettePreset.value] };
+          if (settings.preset && settings.preset !== "custom") {
+            colors = { ...palettePresets[settings.preset] };
+          } else if (settings.theme !== undefined) {
+            const oldTheme = legacyThemes[settings.theme] || settings.theme;
+            const matchingPreset = Object.entries(palettePresets).find(([, preset]) => preset.primary === oldTheme);
+            colors = { ...(palettePresets[oldTheme] || matchingPreset?.[1] || palettePresets.wine) };
+            if (settings.fontColor === undefined && legacyThemes[settings.theme]) {
+              colors.secondary = settings.theme === "light" ? "#3c0316" : "#f0e8db";
+            }
           }
-          if (settings.frameColor !== undefined) frameColor.value = settings.frameColor;
+          if (settings.colors) colors = { ...colors, ...settings.colors };
+          if (settings.fontColor !== undefined) colors.secondary = settings.fontColor;
+          if (!settings.colors && settings.fontColor === undefined && settings.frameColor &&
+              !settings.theme && !settings.preset) {
+            colors.secondary = settings.frameColor;
+          }
+          for (const [role, color] of Object.entries(colors)) {
+            colorControls[role].value = color;
+          }
+          updatePresetSelection();
           if (settings.scriptFont !== undefined) scriptFont.value = settings.scriptFont;
+          if (settings.ampersandFont !== undefined) ampersandFont.value = settings.ampersandFont;
         } catch (error) {
           invalidSharedSettings = true;
           console.error("Loading shared invitation settings failed:", error);
@@ -1061,16 +1154,6 @@
       }
 
       applySharedSettings();
-
-      function updateTheme(theme) {
-        root.dataset.theme = theme;
-        const motifSrc = theme === "sage"
-          ? "assets/small_graphic_red.png"
-          : "assets/small_graphic_green.png";
-        root.style.setProperty("--motif-image", `url("${motifSrc}")`);
-        for (const motif of invitation.querySelectorAll(".petals")) motif.src = motifSrc;
-        updateMotifGrid();
-      }
 
       function updateFitScale() {
         const { width, height } = stage.getBoundingClientRect();
@@ -1097,9 +1180,7 @@
 
         for (let index = 0; index < columns * rows; index += 1) {
           const motif = document.createElement("img");
-          motif.src = root.dataset.theme === "sage"
-            ? "assets/small_graphic_red.png"
-            : "assets/small_graphic_green.png";
+          motif.src = motifImages[colorControls.accent.value];
           motif.alt = "";
           motif.draggable = false;
           if (jitter > 0) {
@@ -1226,8 +1307,14 @@
       bindRange("motif-border-size", (value) => {
         root.style.setProperty("--border-motif-size", `${value}px`);
       });
+      bindRange("motif-border-offset", (value) => {
+        root.style.setProperty("--motif-border-offset", `${value}px`);
+      });
       bindRange("line-border-thickness", (value) => {
         root.style.setProperty("--line-border-thickness", `${value}px`);
+      });
+      bindRange("line-border-offset", (value) => {
+        root.style.setProperty("--line-border-offset", `${value}px`);
       });
       bindRange("paper-speckle-density", updatePaperSpeckles);
       bindRange("paper-speckle-opacity", (value) => {
@@ -1245,25 +1332,34 @@
       for (const id of ["upper-motif-count", "lower-motif-count"]) {
         document.getElementById(id).addEventListener("input", updateMotifCounts);
       }
-      frameColor.addEventListener("change", () => {
-        root.style.setProperty("--frame-color", frameColor.value);
-      });
-      root.style.setProperty("--frame-color", frameColor.value);
       scriptFont.addEventListener("change", updateScriptFont);
       updateScriptFont();
+      ampersandFont.addEventListener("change", () => {
+        root.style.setProperty("--ampersand-font-family", scriptFonts[ampersandFont.value]);
+      });
+      root.style.setProperty("--ampersand-font-family", scriptFonts[ampersandFont.value]);
 
       for (const input of Object.values(treatmentInputs)) {
         input.addEventListener("change", updateTreatments);
       }
       updateTreatments();
 
-      for (const option of themeOptions) {
-        option.addEventListener("change", () => {
-          if (option.checked) updateTheme(option.value);
+      palettePreset.addEventListener("change", () => {
+        if (palettePresets[palettePreset.value]) {
+          for (const [role, color] of Object.entries(palettePresets[palettePreset.value])) {
+            colorControls[role].value = color;
+          }
+          updateColors();
+        }
+      });
+      for (const control of Object.values(colorControls)) {
+        control.addEventListener("change", () => {
+          updatePresetSelection();
+          updateColors();
         });
       }
-      const selectedTheme = [...themeOptions].find((option) => option.checked);
-      if (selectedTheme) updateTheme(selectedTheme.value);
+      updatePresetSelection();
+      updateColors();
 
       window.addEventListener("resize", updateFitScale);
       document.body.classList.toggle("settings-open", !settingsPanel.hidden);
@@ -1282,7 +1378,11 @@
       });
 
       document.getElementById("copy-values").addEventListener("click", async () => {
-        const selectedTheme = document.querySelector('input[name="theme"]:checked').parentElement.textContent.trim();
+        const selectedPreset = palettePreset.options[palettePreset.selectedIndex].text;
+        const selectedColors = Object.fromEntries(Object.entries(colorControls).map(([role, control]) => [
+          role,
+          control.options[control.selectedIndex].text
+        ]));
         const activeTreatments = Object.entries(treatmentInputs)
           .filter(([, input]) => input.checked)
           .map(([name]) => name);
@@ -1308,12 +1408,17 @@
           `background motif grid rotation - ${document.getElementById("motif-grid-rotation").value} degrees`,
           `background motif grid jitter - ${document.getElementById("motif-grid-jitter").value}px`,
           `border motif size - ${document.getElementById("motif-border-size").value}px`,
+          `motif border offset - ${document.getElementById("motif-border-offset").value}px`,
           `line border thickness - ${document.getElementById("line-border-thickness").value}px`,
+          `line border offset - ${document.getElementById("line-border-offset").value}px`,
           `paper speckle density - ${document.getElementById("paper-speckle-density").value}`,
           `paper speckle opacity - ${document.getElementById("paper-speckle-opacity").value}%`,
-          `export frame color - ${frameColor.options[frameColor.selectedIndex].text}`,
+          `palette preset - ${selectedPreset}`,
+          `primary card color - ${selectedColors.primary}`,
+          `secondary font and frame color - ${selectedColors.secondary}`,
+          `accent motif and reception color - ${selectedColors.accent}`,
           `frame thickness - ${document.getElementById("frame-thickness").value}px`,
-          `color palette - ${selectedTheme}`,
+          `ampersand font - ${ampersandFont.options[ampersandFont.selectedIndex].text}`,
           `content scale - ${document.getElementById("canvas-scale").value}%`,
           `corner radius - ${document.getElementById("card-radius").value}px`
         ].join("\n");
