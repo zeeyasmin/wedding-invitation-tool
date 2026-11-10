@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=ED%20Drayton:Regular">
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=MaisonVoyages:CapsRegular">
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=Brandon%20Grotesque:Medium">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alex+Brush&amp;family=Allura&amp;family=Great+Vibes&amp;family=Mrs+Saint+Delafield&amp;family=Parisienne&amp;family=Pinyon+Script&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alex+Brush&amp;family=Allura&amp;family=Caveat&amp;family=Dancing+Script&amp;family=Great+Vibes&amp;family=Homemade+Apple&amp;family=Italianno&amp;family=Mrs+Saint+Delafield&amp;family=Parisienne&amp;family=Petit+Formal+Script&amp;family=Pinyon+Script&amp;family=Rouge+Script&amp;family=Sacramento&amp;family=Satisfy&amp;family=Style+Script&amp;family=Tangerine&amp;display=swap">
     <style>
       :root {
         color-scheme: light;
@@ -28,6 +28,9 @@
         --panel-border: rgb(60 3 22 / 14%);
         --card-border: rgb(60 3 22 / 8%);
         --section-border: rgb(60 3 22 / 15%);
+        --ui-paper: #f0e8db;
+        --ui-ink: #3c0316;
+        --ui-accent: #7d8779;
         --name-size: 107px;
         --pretext-size: 52px;
         --joining-size: 102px;
@@ -40,7 +43,9 @@
         --motif-grid-opacity: 0.38;
         --paper-speckle-opacity: 0.63;
         --frame-color: #7d8779;
+        --frame-thickness: 20px;
         --script-font-family: "Cecily", cursive;
+        --motif-image: url("assets/small_graphic_green.png");
         --line-border-thickness: 2px;
         --pretext-spacing: 14px;
         --name-spacing: 14px;
@@ -52,20 +57,22 @@
       }
 
       :root[data-theme="dark"] {
-        color-scheme: dark;
         --paper: #3c0316;
         --ink: #f0e8db;
-        --surround: #7d8779;
-        --panel-border: rgb(240 232 219 / 14%);
-        --card-border: rgb(240 232 219 / 8%);
-        --section-border: rgb(240 232 219 / 15%);
       }
 
       :root[data-theme="light"] {
-        color-scheme: light;
         --paper: #f0e8db;
         --ink: #3c0316;
-        --surround: #e6e7e5;
+        --accent: #7d8779;
+        --motif-image: url("assets/small_graphic_green.png");
+      }
+
+      :root[data-theme="sage"] {
+        --paper: #7d8779;
+        --ink: #f0e8db;
+        --accent: #3c0316;
+        --motif-image: url("assets/small_graphic_red.png");
       }
 
       * {
@@ -82,7 +89,7 @@
         padding: 14px 18px 18px;
         overflow: hidden;
         background: var(--surround);
-        color: var(--ink);
+        color: var(--ui-ink);
         font-family: "Brandon Grotesque", Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
       }
@@ -98,11 +105,11 @@
       .toolbar-button,
       .panel-button {
         min-height: 42px;
-        border: 1px solid var(--accent);
+        border: 1px solid var(--ui-accent);
         border-radius: 4px;
         padding: 0 18px;
-        background: var(--paper);
-        color: var(--ink);
+        background: var(--ui-paper);
+        color: var(--ui-ink);
         cursor: pointer;
         font: 500 14px "Brandon Grotesque", Arial, sans-serif;
         letter-spacing: 0.08em;
@@ -111,8 +118,8 @@
 
       .toolbar-button:hover,
       .panel-button:hover {
-        background: var(--accent);
-        color: var(--paper);
+        background: var(--ui-accent);
+        color: var(--ui-paper);
       }
 
       .workspace {
@@ -132,10 +139,10 @@
         max-height: 100%;
         flex: 0 0 300px;
         overflow: auto;
-        border: 1px solid var(--panel-border);
+        border: 1px solid rgb(60 3 22 / 14%);
         border-radius: 10px;
         padding: 22px 18px;
-        background: var(--paper);
+        background: var(--ui-paper);
         box-shadow: 0 8px 26px rgb(39 37 34 / 10%);
       }
 
@@ -155,7 +162,7 @@
         margin: -5px -5px 0 8px;
         border: 1px solid transparent;
         background: transparent;
-        color: var(--ink);
+        color: var(--ui-ink);
         cursor: pointer;
         font: 24px/1 "Brandon Grotesque", Arial, sans-serif;
       }
@@ -171,6 +178,7 @@
         box-shadow:
           0 3px 8px rgb(39 37 34 / 10%),
           0 18px 34px rgb(39 37 34 / 8%);
+        color: var(--ink);
         text-align: center;
       }
 
@@ -179,11 +187,11 @@
         top: 50%;
         left: 50%;
         display: grid;
-        width: 760px;
-        height: 1040px;
+        width: calc(720px + var(--frame-thickness) + var(--frame-thickness));
+        height: calc(1000px + var(--frame-thickness) + var(--frame-thickness));
         place-items: center;
         overflow: hidden;
-        border-radius: calc(var(--card-radius) + 20px);
+        border-radius: 0;
         background: var(--frame-color);
         transform: translate(-50%, -50%) scale(var(--view-scale));
         transform-origin: center;
@@ -252,7 +260,7 @@
 
       .motif-border-edge {
         position: absolute;
-        background-image: url("assets/small_graphic_green.png");
+        background-image: var(--motif-image);
         background-size: var(--border-motif-size) var(--border-motif-size);
       }
 
@@ -436,18 +444,18 @@
       .control input {
         grid-column: 1 / -1;
         width: 100%;
-        accent-color: var(--accent);
+        accent-color: var(--ui-accent);
       }
 
       .control select {
         grid-column: 1 / -1;
         width: 100%;
         min-height: 36px;
-        border: 1px solid var(--panel-border);
+        border: 1px solid rgb(60 3 22 / 14%);
         border-radius: 4px;
         padding: 6px 10px;
-        background: var(--paper);
-        color: var(--ink);
+        background: var(--ui-paper);
+        color: var(--ui-ink);
         font: 14px "Brandon Grotesque", Arial, sans-serif;
       }
 
@@ -479,13 +487,13 @@
 
       .settings-section {
         margin: 24px 0 12px;
-        border-top: 1px solid var(--section-border);
+        border-top: 1px solid rgb(60 3 22 / 15%);
         padding-top: 18px;
       }
 
       .settings-section h3 {
         margin: 0;
-        color: var(--accent);
+        color: var(--ui-accent);
         font-size: 13px;
         letter-spacing: .14em;
         text-transform: uppercase;
@@ -506,7 +514,7 @@
 
       .theme-options input {
         width: auto;
-        accent-color: var(--accent);
+        accent-color: var(--ui-accent);
       }
 
       .theme-control {
@@ -521,20 +529,20 @@
       }
 
       .panel-button.primary {
-        border-color: var(--ink);
-        background: var(--ink);
-        color: var(--paper);
+        border-color: var(--ui-ink);
+        background: var(--ui-ink);
+        color: var(--ui-paper);
       }
 
       .panel-button.primary:hover {
-        border-color: var(--accent);
-        background: var(--accent);
+        border-color: var(--ui-accent);
+        background: var(--ui-accent);
       }
 
       .export-status {
         min-height: 1.4em;
         margin: 14px 0 0;
-        color: var(--accent);
+        color: var(--ui-accent);
         font-size: 13px;
       }
 
@@ -697,8 +705,9 @@
           <div class="control theme-control">
             <span>Color palette</span>
             <div class="theme-options" role="radiogroup" aria-label="Color palette">
-              <label><input type="radio" name="theme" value="light"> Light</label>
-              <label><input type="radio" name="theme" value="dark" checked> Dark</label>
+              <label><input type="radio" name="theme" value="light"> Paper</label>
+              <label><input type="radio" name="theme" value="dark" checked> Wine</label>
+              <label><input type="radio" name="theme" value="sage"> Sage</label>
             </div>
           </div>
         </section>
@@ -723,6 +732,11 @@
               <option value="#7d8779" selected>Sage</option>
             </select>
           </div>
+          <div class="control">
+            <label for="frame-thickness">Frame thickness</label>
+            <output id="frame-thickness-output">20 px</output>
+            <input id="frame-thickness" type="range" min="0" max="80" step="1" value="20" data-variable="--frame-thickness" data-unit="px">
+          </div>
         </section>
 
         <section class="settings-section" aria-labelledby="text-heading">
@@ -738,6 +752,16 @@
               <option value="pinyon-script">Pinyon Script</option>
               <option value="mrs-saint-delafield">Mrs Saint Delafield</option>
               <option value="alex-brush">Alex Brush</option>
+              <option value="caveat">Caveat</option>
+              <option value="dancing-script">Dancing Script</option>
+              <option value="homemade-apple">Homemade Apple</option>
+              <option value="italianno">Italianno</option>
+              <option value="petit-formal-script">Petit Formal Script</option>
+              <option value="rouge-script">Rouge Script</option>
+              <option value="sacramento">Sacramento</option>
+              <option value="satisfy">Satisfy</option>
+              <option value="style-script">Style Script</option>
+              <option value="tangerine">Tangerine</option>
             </select>
           </div>
           <div class="control">
@@ -896,7 +920,17 @@
         "allura": '"Allura", cursive',
         "pinyon-script": '"Pinyon Script", cursive',
         "mrs-saint-delafield": '"Mrs Saint Delafield", cursive',
-        "alex-brush": '"Alex Brush", cursive'
+        "alex-brush": '"Alex Brush", cursive',
+        "caveat": '"Caveat", cursive',
+        "dancing-script": '"Dancing Script", cursive',
+        "homemade-apple": '"Homemade Apple", cursive',
+        "italianno": '"Italianno", cursive',
+        "petit-formal-script": '"Petit Formal Script", cursive',
+        "rouge-script": '"Rouge Script", cursive',
+        "sacramento": '"Sacramento", cursive',
+        "satisfy": '"Satisfy", cursive',
+        "style-script": '"Style Script", cursive',
+        "tangerine": '"Tangerine", cursive'
       };
       const treatmentInputs = {
         tile: document.getElementById("treatment-tile"),
@@ -1030,18 +1064,23 @@
 
       function updateTheme(theme) {
         root.dataset.theme = theme;
-        document.querySelector('meta[name="theme-color"]').content =
-          theme === "dark" ? "#3c0316" : "#f0e8db";
+        const motifSrc = theme === "sage"
+          ? "assets/small_graphic_red.png"
+          : "assets/small_graphic_green.png";
+        root.style.setProperty("--motif-image", `url("${motifSrc}")`);
+        for (const motif of invitation.querySelectorAll(".petals")) motif.src = motifSrc;
+        updateMotifGrid();
       }
 
       function updateFitScale() {
         const { width, height } = stage.getBoundingClientRect();
-        const scale = Math.min(1, width / 760, height / 1040);
+        const scale = Math.min(1, width / invitationFrame.offsetWidth, height / invitationFrame.offsetHeight);
         root.style.setProperty("--view-scale", String(scale));
       }
 
       const stageObserver = new ResizeObserver(updateFitScale);
       stageObserver.observe(stage);
+      stageObserver.observe(invitationFrame);
 
       function updateMotifGrid() {
         const size = Number(document.getElementById("motif-tile-size").value);
@@ -1058,7 +1097,9 @@
 
         for (let index = 0; index < columns * rows; index += 1) {
           const motif = document.createElement("img");
-          motif.src = "assets/small_graphic_green.png";
+          motif.src = root.dataset.theme === "sage"
+            ? "assets/small_graphic_red.png"
+            : "assets/small_graphic_green.png";
           motif.alt = "";
           motif.draggable = false;
           if (jitter > 0) {
@@ -1241,7 +1282,7 @@
       });
 
       document.getElementById("copy-values").addEventListener("click", async () => {
-        const selectedTheme = document.querySelector('input[name="theme"]:checked').value;
+        const selectedTheme = document.querySelector('input[name="theme"]:checked').parentElement.textContent.trim();
         const activeTreatments = Object.entries(treatmentInputs)
           .filter(([, input]) => input.checked)
           .map(([name]) => name);
@@ -1271,6 +1312,7 @@
           `paper speckle density - ${document.getElementById("paper-speckle-density").value}`,
           `paper speckle opacity - ${document.getElementById("paper-speckle-opacity").value}%`,
           `export frame color - ${frameColor.options[frameColor.selectedIndex].text}`,
+          `frame thickness - ${document.getElementById("frame-thickness").value}px`,
           `color palette - ${selectedTheme}`,
           `content scale - ${document.getElementById("canvas-scale").value}%`,
           `corner radius - ${document.getElementById("card-radius").value}px`
@@ -1305,8 +1347,8 @@
           const canvas = await html2canvas(invitationFrame, {
             backgroundColor: getComputedStyle(invitationFrame).backgroundColor,
             scale: 2,
-            width: 760,
-            height: 1040,
+            width: invitationFrame.offsetWidth,
+            height: invitationFrame.offsetHeight,
             windowWidth: 800,
             logging: false
           });
