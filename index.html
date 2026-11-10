@@ -12,8 +12,10 @@
     <link rel="preconnect" href="https://d1olp21zen30mx.cloudfront.net">
     <link rel="preconnect" href="https://d2mx2n54ydq2ht.cloudfront.net" crossorigin>
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=Cecily:Regular">
+    <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=ED%20Drayton:Regular">
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=MaisonVoyages:CapsRegular">
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=Brandon%20Grotesque:Medium">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alex+Brush&amp;family=Allura&amp;family=Great+Vibes&amp;family=Mrs+Saint+Delafield&amp;family=Parisienne&amp;family=Pinyon+Script&amp;display=swap">
     <style>
       :root {
         color-scheme: light;
@@ -37,6 +39,9 @@
         --canvas-scale: 0.9;
         --motif-grid-opacity: 0.38;
         --paper-speckle-opacity: 0.63;
+        --frame-color: #7d8779;
+        --script-font-family: "Cecily", cursive;
+        --line-border-thickness: 2px;
         --pretext-spacing: 14px;
         --name-spacing: 14px;
         --date-spacing: 14px;
@@ -156,9 +161,7 @@
       }
 
       .invitation {
-        position: absolute;
-        top: 50%;
-        left: 50%;
+        position: relative;
         width: 720px;
         height: 1000px;
         overflow: hidden;
@@ -169,8 +172,35 @@
           0 3px 8px rgb(39 37 34 / 10%),
           0 18px 34px rgb(39 37 34 / 8%);
         text-align: center;
+      }
+
+      .invitation-frame {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        display: grid;
+        width: 760px;
+        height: 1040px;
+        place-items: center;
+        overflow: hidden;
+        border-radius: calc(var(--card-radius) + 20px);
+        background: var(--frame-color);
         transform: translate(-50%, -50%) scale(var(--view-scale));
         transform-origin: center;
+      }
+
+      .invitation[data-line="true"] .line-border {
+        display: block;
+      }
+
+      .line-border {
+        position: absolute;
+        z-index: 1;
+        inset: 20px;
+        display: none;
+        border: var(--line-border-thickness) solid var(--accent);
+        border-radius: max(0px, calc(var(--card-radius) - 20px));
+        pointer-events: none;
       }
 
       .motif-grid {
@@ -265,7 +295,7 @@
         flex: 1 1 auto;
       }
 
-      .exporting .invitation {
+      .exporting .invitation-frame {
         position: relative;
         top: auto;
         left: auto;
@@ -287,7 +317,7 @@
 
       .eyebrow {
         margin: 0 0 var(--pretext-spacing);
-        font-family: "Cecily", cursive;
+        font-family: var(--script-font-family);
         font-size: var(--pretext-size);
         font-weight: 400;
         -webkit-text-stroke: var(--script-stroke) currentColor;
@@ -319,7 +349,7 @@
         flex: 0 0 104px;
         place-items: center;
         margin: 0;
-        font-family: "Cecily", cursive;
+        font-family: var(--script-font-family);
         font-size: var(--joining-size);
         font-weight: 400;
         -webkit-text-stroke: var(--script-stroke) currentColor;
@@ -328,27 +358,26 @@
       }
 
       .motif-slot {
-        display: block;
+        display: flex;
         position: relative;
         width: 100%;
-        height: 48px;
-        flex: 0 0 48px;
+        min-height: 72px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
         margin-block: var(--motif-vertical-spacing);
       }
 
-      .details[data-show-motifs="false"] .motif-slot {
-        visibility: hidden;
+      .motif-slot[data-count="0"] {
+        display: none;
       }
 
       .petals {
-        position: absolute;
-        top: 50%;
-        left: 50%;
         width: var(--motif-size);
         height: var(--motif-size);
         max-width: none;
         object-fit: contain;
-        transform: translate(-50%, -50%);
       }
 
       .date {
@@ -356,7 +385,7 @@
         flex-direction: column;
         margin: 0 0 var(--date-spacing);
         color: var(--ink);
-        font-family: "Cecily", cursive;
+        font-family: var(--script-font-family);
         font-size: var(--date-size);
         font-weight: 400;
         -webkit-text-stroke: var(--script-stroke) currentColor;
@@ -408,6 +437,18 @@
         grid-column: 1 / -1;
         width: 100%;
         accent-color: var(--accent);
+      }
+
+      .control select {
+        grid-column: 1 / -1;
+        width: 100%;
+        min-height: 36px;
+        border: 1px solid var(--panel-border);
+        border-radius: 4px;
+        padding: 6px 10px;
+        background: var(--paper);
+        color: var(--ink);
+        font: 14px "Brandon Grotesque", Arial, sans-serif;
       }
 
       .control.checkbox-control {
@@ -604,7 +645,7 @@
           <div class="control" id="motif-tile-size-control" hidden>
             <label for="motif-tile-size">Motif size</label>
             <output id="motif-tile-size-output">56 px</output>
-            <input id="motif-tile-size" type="range" min="48" max="100" step="1" value="56">
+            <input id="motif-tile-size" type="range" min="16" max="100" step="1" value="56">
           </div>
           <div class="control" id="motif-tile-spacing-control" hidden>
             <label for="motif-tile-spacing">Motif spacing</label>
@@ -616,6 +657,11 @@
             <output id="motif-grid-rotation-output">20°</output>
             <input id="motif-grid-rotation" type="range" min="-45" max="45" step="5" value="20">
           </div>
+          <div class="control" id="motif-grid-jitter-control" hidden>
+            <label for="motif-grid-jitter">Grid jitter</label>
+            <output id="motif-grid-jitter-output">0 px</output>
+            <input id="motif-grid-jitter" type="range" min="0" max="24" step="1" value="0">
+          </div>
           <div class="control checkbox-control">
             <input id="treatment-border" type="checkbox" checked>
             <label for="treatment-border">Thin motif border</label>
@@ -624,6 +670,15 @@
             <label for="motif-border-size">Border motif size / density</label>
             <output id="motif-border-size-output">44 px</output>
             <input id="motif-border-size" type="range" min="24" max="96" step="1" value="44">
+          </div>
+          <div class="control checkbox-control">
+            <input id="treatment-line" type="checkbox">
+            <label for="treatment-line">Line border</label>
+          </div>
+          <div class="control" id="line-border-thickness-control" hidden>
+            <label for="line-border-thickness">Line thickness</label>
+            <output id="line-border-thickness-output">2 px</output>
+            <input id="line-border-thickness" type="range" min="1" max="12" step="1" value="2">
           </div>
           <div class="control checkbox-control">
             <input id="treatment-paper" type="checkbox">
@@ -660,10 +715,31 @@
             <output id="card-radius-output">61 px</output>
             <input id="card-radius" type="range" min="0" max="120" step="1" value="61" data-variable="--card-radius" data-unit="px">
           </div>
+          <div class="control">
+            <label for="frame-color">Export frame color</label>
+            <select id="frame-color">
+              <option value="#f0e8db">Paper</option>
+              <option value="#3c0316">Wine</option>
+              <option value="#7d8779" selected>Sage</option>
+            </select>
+          </div>
         </section>
 
         <section class="settings-section" aria-labelledby="text-heading">
           <h3 id="text-heading">Text</h3>
+          <div class="control">
+            <label for="script-font">Script font</label>
+            <select id="script-font">
+              <option value="cecily" selected>Cecily</option>
+              <option value="ed-drayton">ED Drayton</option>
+              <option value="parisienne">Parisienne</option>
+              <option value="great-vibes">Great Vibes</option>
+              <option value="allura">Allura</option>
+              <option value="pinyon-script">Pinyon Script</option>
+              <option value="mrs-saint-delafield">Mrs Saint Delafield</option>
+              <option value="alex-brush">Alex Brush</option>
+            </select>
+          </div>
           <div class="control">
             <label for="pretext-size">Pretext size</label>
             <output id="pretext-size-output">52 px</output>
@@ -723,9 +799,15 @@
             <output id="motif-vertical-spacing-output">0 px</output>
             <input id="motif-vertical-spacing" type="range" min="0" max="80" step="1" value="0" data-variable="--motif-vertical-spacing" data-unit="px">
           </div>
-          <div class="control checkbox-control">
-            <input id="show-divider-motifs" type="checkbox" checked>
-            <label for="show-divider-motifs">Show motifs between text blocks</label>
+          <div class="control">
+            <label for="upper-motif-count">Upper divider icons</label>
+            <output id="upper-motif-count-output">1 icon</output>
+            <input id="upper-motif-count" type="range" min="0" max="5" step="1" value="1">
+          </div>
+          <div class="control">
+            <label for="lower-motif-count">Lower divider icons</label>
+            <output id="lower-motif-count-output">3 icons</output>
+            <input id="lower-motif-count" type="range" min="0" max="5" step="1" value="3">
           </div>
         </section>
 
@@ -739,46 +821,57 @@
       </aside>
 
       <div class="stage">
-        <main class="invitation" id="invitation" aria-label="Wedding invitation">
-          <div class="motif-grid" aria-hidden="true"></div>
-          <div class="paper-speckles" aria-hidden="true"></div>
-          <div class="motif-border" aria-hidden="true">
-            <span class="motif-border-edge top"></span>
-            <span class="motif-border-edge bottom"></span>
-            <span class="motif-border-edge left"></span>
-            <span class="motif-border-edge right"></span>
-          </div>
-          <section class="details">
-            <p class="eyebrow" data-en="Join us for the wedding of" data-es="Acompáñanos a celebrar la boda de">
-              Join us for the wedding of
-            </p>
-            <div class="name-block">
-              <h1 class="name">Zahra</h1>
-              <p class="joining-word" aria-label="and">&amp;</p>
-              <h1 class="name">Ejnar</h1>
+        <div class="invitation-frame" id="invitation-frame">
+          <main class="invitation" id="invitation" aria-label="Wedding invitation">
+            <div class="motif-grid" aria-hidden="true"></div>
+            <div class="paper-speckles" aria-hidden="true"></div>
+            <div class="motif-border" aria-hidden="true">
+              <span class="motif-border-edge top"></span>
+              <span class="motif-border-edge bottom"></span>
+              <span class="motif-border-edge left"></span>
+              <span class="motif-border-edge right"></span>
             </div>
+            <div class="line-border" aria-hidden="true"></div>
+            <section class="details">
+              <p class="eyebrow" data-en="Join us for the wedding of" data-es="Acompáñanos a celebrar la boda de">
+                Join us for the wedding of
+              </p>
+              <div class="name-block">
+                <h1 class="name">Zahra</h1>
+                <p class="joining-word" aria-label="and">&amp;</p>
+                <h1 class="name">Ejnar</h1>
+              </div>
 
-            <span class="motif-slot">
-              <img class="petals" src="assets/small_graphic_green.png" alt="">
-            </span>
+              <span class="motif-slot" id="upper-motif-slot" data-count="1" aria-hidden="true">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+              </span>
 
-            <p class="date">
-              <span class="date-line" data-en="Saturday, the thirteenth of March" data-es="Sábado, trece de marzo">Saturday, the thirteenth of March</span>
-              <span class="date-line" data-en="two thousand twenty-seven" data-es="dos mil veintisiete">two thousand twenty-seven</span>
-              <span class="date-line" data-en="at four o’clock in the afternoon" data-es="a las cuatro de la tarde">at four o’clock in the afternoon</span>
-            </p>
+              <p class="date">
+                <span class="date-line" data-en="Saturday, the thirteenth of March" data-es="Sábado, trece de marzo">Saturday, the thirteenth of March</span>
+                <span class="date-line" data-en="two thousand twenty-seven" data-es="dos mil veintisiete">two thousand twenty-seven</span>
+                <span class="date-line" data-en="at four o’clock in the afternoon" data-es="a las cuatro de la tarde">at four o’clock in the afternoon</span>
+              </p>
 
-            <span class="motif-slot second">
-              <img class="petals" src="assets/small_graphic_green.png" alt="">
-            </span>
+              <span class="motif-slot second" id="lower-motif-slot" data-count="3" aria-hidden="true">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+                <img class="petals" src="assets/small_graphic_green.png" alt="">
+              </span>
 
-            <p class="location">
-              <span class="location-line">2273 Alaqua Drive</span>
-              <span class="location-line">Longwood, Florida 32779</span>
-              <span class="location-line reception-line" data-en="Reception to follow" data-es="Recepción a continuación">Reception to follow</span>
-            </p>
-          </section>
-        </main>
+              <p class="location">
+                <span class="location-line">2273 Alaqua Drive</span>
+                <span class="location-line">Longwood, Florida 32779</span>
+                <span class="location-line reception-line" data-en="Reception to follow" data-es="Recepción a continuación">Reception to follow</span>
+              </p>
+            </section>
+          </main>
+        </div>
       </div>
     </div>
 
@@ -791,25 +884,40 @@
       const settingsToggle = document.getElementById("settings-toggle");
       const stage = document.querySelector(".stage");
       const motifGrid = document.querySelector(".motif-grid");
-      const details = document.querySelector(".details");
+      const invitationFrame = document.getElementById("invitation-frame");
+      const frameColor = document.getElementById("frame-color");
+      const scriptFont = document.getElementById("script-font");
       const themeOptions = document.querySelectorAll('input[name="theme"]');
+      const scriptFonts = {
+        "cecily": '"Cecily", cursive',
+        "ed-drayton": '"ED Drayton", cursive',
+        "parisienne": '"Parisienne", cursive',
+        "great-vibes": '"Great Vibes", cursive',
+        "allura": '"Allura", cursive',
+        "pinyon-script": '"Pinyon Script", cursive',
+        "mrs-saint-delafield": '"Mrs Saint Delafield", cursive',
+        "alex-brush": '"Alex Brush", cursive'
+      };
       const treatmentInputs = {
         tile: document.getElementById("treatment-tile"),
         border: document.getElementById("treatment-border"),
-        paper: document.getElementById("treatment-paper")
+        paper: document.getElementById("treatment-paper"),
+        line: document.getElementById("treatment-line")
       };
       const treatmentControls = {
         tile: [
           "motif-opacity-control",
           "motif-tile-size-control",
           "motif-tile-spacing-control",
-          "motif-grid-rotation-control"
+          "motif-grid-rotation-control",
+          "motif-grid-jitter-control"
         ].map((id) => document.getElementById(id)),
         border: [document.getElementById("motif-border-size-control")],
         paper: [
           document.getElementById("paper-speckle-density-control"),
           document.getElementById("paper-speckle-opacity-control")
-        ]
+        ],
+        line: [document.getElementById("line-border-thickness-control")]
       };
       const paperSpeckles = document.querySelector(".paper-speckles");
       const rangeInputs = [...document.querySelectorAll('input[type="range"]')];
@@ -821,7 +929,9 @@
         return {
           ranges: Object.fromEntries(rangeInputs.map((input) => [input.id, input.value])),
           checkboxes: Object.fromEntries(checkboxInputs.map((input) => [input.id, input.checked])),
-          theme: document.querySelector('input[name="theme"]:checked').value
+          theme: document.querySelector('input[name="theme"]:checked').value,
+          frameColor: frameColor.value,
+          scriptFont: scriptFont.value
         };
       }
 
@@ -873,7 +983,8 @@
               throw new Error("Checkbox settings must be an object.");
             }
             for (const [id, value] of Object.entries(settings.checkboxes)) {
-              if (!checkboxInputs.some((input) => input.id === id) || typeof value !== "boolean") {
+              if ((!checkboxInputs.some((input) => input.id === id) && id !== "show-divider-motifs") ||
+                  typeof value !== "boolean") {
                 throw new Error(`Invalid checkbox setting: ${id}.`);
               }
             }
@@ -883,17 +994,32 @@
               ![...themeOptions].some((option) => option.value === settings.theme)) {
             throw new Error("Invalid color palette.");
           }
+          if (settings.frameColor !== undefined &&
+              ![...frameColor.options].some((option) => option.value === settings.frameColor)) {
+            throw new Error("Invalid frame color.");
+          }
+          if (settings.scriptFont !== undefined && !Object.hasOwn(scriptFonts, settings.scriptFont)) {
+            throw new Error("Invalid script font.");
+          }
 
           for (const [id, value] of Object.entries(settings.ranges || {})) {
             const input = document.getElementById(id);
             if (input) input.value = String(value);
           }
           for (const [id, value] of Object.entries(settings.checkboxes || {})) {
-            document.getElementById(id).checked = value;
+            if (id !== "show-divider-motifs") document.getElementById(id).checked = value;
+          }
+          if (settings.checkboxes?.["show-divider-motifs"] === false &&
+              settings.ranges?.["upper-motif-count"] === undefined &&
+              settings.ranges?.["lower-motif-count"] === undefined) {
+            document.getElementById("upper-motif-count").value = "0";
+            document.getElementById("lower-motif-count").value = "0";
           }
           if (settings.theme !== undefined) {
             for (const option of themeOptions) option.checked = option.value === settings.theme;
           }
+          if (settings.frameColor !== undefined) frameColor.value = settings.frameColor;
+          if (settings.scriptFont !== undefined) scriptFont.value = settings.scriptFont;
         } catch (error) {
           invalidSharedSettings = true;
           console.error("Loading shared invitation settings failed:", error);
@@ -910,7 +1036,7 @@
 
       function updateFitScale() {
         const { width, height } = stage.getBoundingClientRect();
-        const scale = Math.min(1, width / 720, height / 1000);
+        const scale = Math.min(1, width / 760, height / 1040);
         root.style.setProperty("--view-scale", String(scale));
       }
 
@@ -920,15 +1046,26 @@
       function updateMotifGrid() {
         const size = Number(document.getElementById("motif-tile-size").value);
         const spacing = Number(document.getElementById("motif-tile-spacing").value);
+        const jitter = Number(document.getElementById("motif-grid-jitter").value);
         const columns = Math.ceil(1500 / (size + spacing));
         const rows = Math.ceil(1500 / (size + spacing));
         const fragment = document.createDocumentFragment();
+        let seed = 193733;
+        const random = () => {
+          seed = (seed * 16807) % 2147483647;
+          return (seed - 1) / 2147483646;
+        };
 
         for (let index = 0; index < columns * rows; index += 1) {
           const motif = document.createElement("img");
           motif.src = "assets/small_graphic_green.png";
           motif.alt = "";
           motif.draggable = false;
+          if (jitter > 0) {
+            const x = (random() * 2 - 1) * jitter;
+            const y = (random() * 2 - 1) * jitter;
+            motif.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+          }
           fragment.append(motif);
         }
 
@@ -936,6 +1073,27 @@
         motifGrid.style.gridTemplateColumns = `repeat(${columns}, ${size}px)`;
         motifGrid.style.gridAutoRows = `${size}px`;
         motifGrid.style.gap = `${spacing}px`;
+      }
+
+      function updateMotifCounts() {
+        for (const [id, slotId] of [
+          ["upper-motif-count", "upper-motif-slot"],
+          ["lower-motif-count", "lower-motif-slot"]
+        ]) {
+          const count = Number(document.getElementById(id).value);
+          const slot = document.getElementById(slotId);
+          slot.dataset.count = String(count);
+          [...slot.querySelectorAll(".petals")].forEach((motif, index) => {
+            motif.hidden = index >= count;
+          });
+          const output = document.getElementById(`${id}-output`);
+          output.value = `${count} ${count === 1 ? "icon" : "icons"}`;
+          output.textContent = output.value;
+        }
+      }
+
+      function updateScriptFont() {
+        root.style.setProperty("--script-font-family", scriptFonts[scriptFont.value]);
       }
 
       function updatePaperSpeckles() {
@@ -1020,11 +1178,15 @@
       });
       bindRange("motif-tile-size", updateMotifGrid);
       bindRange("motif-tile-spacing", updateMotifGrid);
+      bindRange("motif-grid-jitter", updateMotifGrid);
       bindRange("motif-grid-rotation", (value) => {
         root.style.setProperty("--motif-grid-rotation", `${value}deg`);
       });
       bindRange("motif-border-size", (value) => {
         root.style.setProperty("--border-motif-size", `${value}px`);
+      });
+      bindRange("line-border-thickness", (value) => {
+        root.style.setProperty("--line-border-thickness", `${value}px`);
       });
       bindRange("paper-speckle-density", updatePaperSpeckles);
       bindRange("paper-speckle-opacity", (value) => {
@@ -1036,7 +1198,18 @@
         });
       }
       updateMotifGrid();
+      updateMotifCounts();
       updatePaperSpeckles();
+
+      for (const id of ["upper-motif-count", "lower-motif-count"]) {
+        document.getElementById(id).addEventListener("input", updateMotifCounts);
+      }
+      frameColor.addEventListener("change", () => {
+        root.style.setProperty("--frame-color", frameColor.value);
+      });
+      root.style.setProperty("--frame-color", frameColor.value);
+      scriptFont.addEventListener("change", updateScriptFont);
+      updateScriptFont();
 
       for (const input of Object.values(treatmentInputs)) {
         input.addEventListener("change", updateTreatments);
@@ -1051,12 +1224,7 @@
       const selectedTheme = [...themeOptions].find((option) => option.checked);
       if (selectedTheme) updateTheme(selectedTheme.value);
 
-      document.getElementById("show-divider-motifs").addEventListener("change", (event) => {
-        details.dataset.showMotifs = String(event.currentTarget.checked);
-      });
-
       window.addEventListener("resize", updateFitScale);
-      details.dataset.showMotifs = String(document.getElementById("show-divider-motifs").checked);
       document.body.classList.toggle("settings-open", !settingsPanel.hidden);
       updateFitScale();
       if (invalidSharedSettings) {
@@ -1082,6 +1250,7 @@
           `name size - ${document.getElementById("name-size").value}`,
           `ampersand size - ${document.getElementById("joining-size").value}`,
           `script thickness - ${document.getElementById("script-stroke").value}`,
+          `script font - ${scriptFont.options[scriptFont.selectedIndex].text}`,
           `pretext spacing - ${document.getElementById("pretext-spacing").value}px`,
           `name spacing - ${document.getElementById("name-spacing").value}px`,
           `date text size - ${document.getElementById("date-size").value}`,
@@ -1089,15 +1258,19 @@
           `address size - ${document.getElementById("address-size").value}`,
           `divider motif size - ${document.getElementById("motif-size").value}`,
           `divider motif spacing above and below - ${document.getElementById("motif-vertical-spacing").value}px`,
-          `divider motifs - ${document.getElementById("show-divider-motifs").checked ? "on" : "off"}`,
+          `upper divider icons - ${document.getElementById("upper-motif-count").value}`,
+          `lower divider icons - ${document.getElementById("lower-motif-count").value}`,
           `background treatments - ${activeTreatments.length ? activeTreatments.join(", ") : "none"}`,
           `background motif opacity - ${document.getElementById("motif-opacity").value}%`,
           `background motif size - ${document.getElementById("motif-tile-size").value}px`,
           `background motif spacing - ${document.getElementById("motif-tile-spacing").value}px`,
           `background motif grid rotation - ${document.getElementById("motif-grid-rotation").value} degrees`,
+          `background motif grid jitter - ${document.getElementById("motif-grid-jitter").value}px`,
           `border motif size - ${document.getElementById("motif-border-size").value}px`,
+          `line border thickness - ${document.getElementById("line-border-thickness").value}px`,
           `paper speckle density - ${document.getElementById("paper-speckle-density").value}`,
           `paper speckle opacity - ${document.getElementById("paper-speckle-opacity").value}%`,
+          `export frame color - ${frameColor.options[frameColor.selectedIndex].text}`,
           `color palette - ${selectedTheme}`,
           `content scale - ${document.getElementById("canvas-scale").value}%`,
           `corner radius - ${document.getElementById("card-radius").value}px`
@@ -1129,11 +1302,11 @@
         try {
           await document.fonts.ready;
           document.body.classList.add("exporting");
-          const canvas = await html2canvas(invitation, {
-            backgroundColor: getComputedStyle(invitation).backgroundColor,
+          const canvas = await html2canvas(invitationFrame, {
+            backgroundColor: getComputedStyle(invitationFrame).backgroundColor,
             scale: 2,
-            width: 720,
-            height: 1000,
+            width: 760,
+            height: 1040,
             windowWidth: 800,
             logging: false
           });
