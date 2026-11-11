@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=Cecily:Regular">
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=MaisonVoyages:CapsRegular">
     <link rel="stylesheet" href="https://d1olp21zen30mx.cloudfront.net/api/css?family=Brandon%20Grotesque:Medium">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno&amp;family=Tangerine&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italianno&amp;family=Petit+Formal+Script&amp;family=Pinyon+Script&amp;family=Tangerine&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/miama-nueva">
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/rundkursiv">
     <style>
       :root {
         color-scheme: light;
@@ -455,6 +457,12 @@
         font: 14px "Brandon Grotesque", Arial, sans-serif;
       }
 
+      .font-note {
+        margin: -4px 0 0;
+        color: var(--ui-ink);
+        font-size: 12px;
+      }
+
       .control.checkbox-control {
         grid-template-columns: auto 1fr;
         align-items: center;
@@ -633,10 +641,11 @@
               <option value="#3c0316">Wine (#3C0316)</option>
               <option value="#7d8779">Sage (#7D8779)</option>
               <option value="#400911">Burgundy (#400911)</option>
-              <option value="#5a5d18">Olive (#5A5D18)</option>
-              <option value="#dbcfbd" selected>Cream (#DBCFBD)</option>
+              <option value="#5a5d18" selected>Olive (#5A5D18)</option>
+              <option value="#dbcfbd">Cream (#DBCFBD)</option>
               <option value="#a9450c">Terracotta (#A9450C)</option>
               <option value="#b385bb">Lavender (#B385BB)</option>
+              <option value="#8c472b">Jorange (#8C472B)</option>
             </select>
           </div>
           <div class="control">
@@ -644,12 +653,13 @@
             <select id="secondary-color">
               <option value="#f0e8db">Paper (#F0E8DB)</option>
               <option value="#3c0316">Wine (#3C0316)</option>
-              <option value="#7d8779" selected>Sage (#7D8779)</option>
+              <option value="#7d8779">Sage (#7D8779)</option>
               <option value="#400911">Burgundy (#400911)</option>
               <option value="#5a5d18">Olive (#5A5D18)</option>
-              <option value="#dbcfbd">Cream (#DBCFBD)</option>
+              <option value="#dbcfbd" selected>Cream (#DBCFBD)</option>
               <option value="#a9450c">Terracotta (#A9450C)</option>
               <option value="#b385bb">Lavender (#B385BB)</option>
+              <option value="#8c472b">Jorange (#8C472B)</option>
             </select>
           </div>
           <div class="control">
@@ -663,6 +673,7 @@
               <option value="#dbcfbd">Cream (#DBCFBD)</option>
               <option value="#a9450c">Terracotta (#A9450C)</option>
               <option value="#b385bb">Lavender (#B385BB)</option>
+              <option value="#8c472b">Jorange (#8C472B)</option>
             </select>
           </div>
         </section>
@@ -773,6 +784,11 @@
               <option value="cecily" selected>Cecily</option>
               <option value="italianno">Italianno</option>
               <option value="tangerine">Tangerine</option>
+              <option value="petit-formal-script">Petit Formal Script</option>
+              <option value="pinyon-script">Pinyon Script</option>
+              <option value="miama-nueva">Miama Nueva</option>
+              <option value="rundkursiv">Rundkursiv</option>
+              <option value="ils-script">ILS Script</option>
             </select>
           </div>
           <div class="control">
@@ -781,8 +797,17 @@
               <option value="cecily" selected>Cecily</option>
               <option value="italianno">Italianno</option>
               <option value="tangerine">Tangerine</option>
+              <option value="petit-formal-script">Petit Formal Script</option>
+              <option value="pinyon-script">Pinyon Script</option>
+              <option value="miama-nueva">Miama Nueva</option>
+              <option value="rundkursiv">Rundkursiv</option>
+              <option value="ils-script">ILS Script</option>
             </select>
           </div>
+          <p class="font-note">
+            ILS Script requires local installation.
+            <a href="https://www.fontspace.com/ils-script-font-f5074" target="_blank" rel="noopener noreferrer">Get the font</a>
+          </p>
           <div class="control">
             <label for="pretext-size">Pretext size</label>
             <output id="pretext-size-output">52 px</output>
@@ -856,9 +881,9 @@
 
         <div class="settings-actions">
           <button class="panel-button" id="language-toggle" type="button">Español</button>
-          <button class="panel-button" id="copy-link" type="button">Copy shareable link</button>
-          <button class="panel-button" id="copy-short-link" type="button">Copy short link (is.gd)</button>
-          <button class="panel-button" id="copy-values" type="button">Copy tuned values</button>
+          <!-- <button class="panel-button" id="copy-link" type="button">Copy shareable link</button> -->
+          <button class="panel-button" id="copy-short-link" type="button">Copy link</button>
+          <!-- <button class="panel-button" id="copy-values" type="button">Copy tuned values</button> -->
           <button class="panel-button primary" id="download-png" type="button">Download PNG</button>
         </div>
         <p class="export-status" id="export-status" role="status" aria-live="polite"></p>
@@ -963,7 +988,12 @@
       const scriptFonts = {
         "cecily": '"Cecily", cursive',
         "italianno": '"Italianno", cursive',
-        "tangerine": '"Tangerine", cursive'
+        "tangerine": '"Tangerine", cursive',
+        "petit-formal-script": '"Petit Formal Script", cursive',
+        "pinyon-script": '"Pinyon Script", cursive',
+        "miama-nueva": '"Miama Nueva", cursive',
+        "rundkursiv": '"Rundkursiv", cursive',
+        "ils-script": '"ILS Script", "Cecily", cursive'
       };
       const legacyThemes = {
         light: legacyPresets.paper,
@@ -1528,16 +1558,6 @@
         } catch (error) {
           exportStatus.textContent = "Could not copy values. Please select and copy them manually.";
           console.error("Copying invitation values failed:", error);
-        }
-      });
-
-      document.getElementById("copy-link").addEventListener("click", async () => {
-        try {
-          await copyText(await createShareUrl());
-          exportStatus.textContent = "Shareable link copied.";
-        } catch (error) {
-          exportStatus.textContent = error.message || "Could not create the shareable link.";
-          console.error("Copying the invitation share link failed:", error);
         }
       });
 
