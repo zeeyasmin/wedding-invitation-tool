@@ -875,8 +875,8 @@
 
         <div class="settings-actions">
           <button class="panel-button" id="language-toggle" type="button">Español</button>
-          <!-- <button class="panel-button" id="copy-link" type="button">Copy shareable link</button> -->
-          <button class="panel-button" id="copy-short-link" type="button">Copy link</button>
+          <button class="panel-button" id="copy-link" type="button">Copy share link</button>
+          <button class="panel-button" id="copy-short-link" type="button">Copy short link (is.gd)</button>
           <!-- <button class="panel-button" id="copy-values" type="button">Copy tuned values</button> -->
           <button class="panel-button primary" id="download-png" type="button">Download PNG</button>
         </div>
@@ -1123,21 +1123,30 @@
       }
 
       async function copyText(text) {
-        if (navigator.clipboard?.writeText) {
+        try {
+          if (!navigator.clipboard?.writeText) {
+            throw new Error("Clipboard API is unavailable.");
+          }
           await navigator.clipboard.writeText(text);
           return;
+        } catch (clipboardError) {
+          const copyBuffer = document.createElement("textarea");
+          copyBuffer.value = text;
+          copyBuffer.setAttribute("readonly", "");
+          copyBuffer.style.position = "fixed";
+          copyBuffer.style.opacity = "0";
+          document.body.append(copyBuffer);
+          let copied = false;
+          try {
+            copyBuffer.select();
+            copied = document.execCommand("copy");
+          } finally {
+            copyBuffer.remove();
+          }
+          if (!copied) {
+            throw new Error("Clipboard copy was rejected.", { cause: clipboardError });
+          }
         }
-
-        const copyBuffer = document.createElement("textarea");
-        copyBuffer.value = text;
-        copyBuffer.setAttribute("readonly", "");
-        copyBuffer.style.position = "fixed";
-        copyBuffer.style.opacity = "0";
-        document.body.append(copyBuffer);
-        copyBuffer.select();
-        const copied = document.execCommand("copy");
-        copyBuffer.remove();
-        if (!copied) throw new Error("Clipboard copy was rejected.");
       }
 
       function updateColors() {
@@ -1499,7 +1508,7 @@
         languageToggle.textContent = language === "en" ? "Español" : "English";
       });
 
-      document.getElementById("copy-values").addEventListener("click", async () => {
+      document.getElementById("copy-values")?.addEventListener("click", async () => {
         const selectedPreset = palettePreset.options[palettePreset.selectedIndex].text;
         const selectedColors = Object.fromEntries(Object.entries(colorControls).map(([role, control]) => [
           role,
@@ -1551,6 +1560,17 @@
         } catch (error) {
           exportStatus.textContent = "Could not copy values. Please select and copy them manually.";
           console.error("Copying invitation values failed:", error);
+        }
+      });
+
+      document.getElementById("copy-link").addEventListener("click", async () => {
+        exportStatus.textContent = "Creating share link…";
+        try {
+          await copyText(await createShareUrl());
+          exportStatus.textContent = "Share link copied.";
+        } catch (error) {
+          exportStatus.textContent = error.message || "Could not copy the share link.";
+          console.error("Copying the invitation share link failed:", error);
         }
       });
 
